@@ -7,11 +7,21 @@ namespace BooksWebAPI.Models
 {
     public class BookModel
     {
-        public int BookId { get; set; }
+        public int Id { get; set; }
+
         public string Name { get; set; }
+
         public string ShortDescription { get; set; }
+
         public byte[] CoverImage { get; set; }
+
         public int PublishingYear { get; set; }
-        public string Author { get; set; }
+
+        public Author Author { get; set; }
+    }
+
+    public class Author
+    {
+        public Guid Id { get; set; }
     }
 }

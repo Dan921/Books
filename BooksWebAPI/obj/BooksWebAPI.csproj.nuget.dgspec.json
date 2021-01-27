@@ -1,23 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "d:\\_Projects\\Students\\Books\\BooksWebAPI\\BooksWebAPI.csproj": {}
+    "C:\\Users\\Kupry\\source\\repos\\BooksWebApplication\\BooksWebAPI\\BooksWebAPI.csproj": {}
   },
   "projects": {
-    "d:\\_Projects\\Students\\Books\\Application\\Application.csproj": {
+    "C:\\Users\\Kupry\\source\\repos\\BooksWebApplication\\Application\\Application.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "d:\\_Projects\\Students\\Books\\Application\\Application.csproj",
+        "projectUniqueName": "C:\\Users\\Kupry\\source\\repos\\BooksWebApplication\\Application\\Application.csproj",
         "projectName": "Application",
-        "projectPath": "d:\\_Projects\\Students\\Books\\Application\\Application.csproj",
-        "packagesPath": "C:\\Users\\oleg-k\\.nuget\\packages\\",
-        "outputPath": "d:\\_Projects\\Students\\Books\\Application\\obj\\",
+        "projectPath": "C:\\Users\\Kupry\\source\\repos\\BooksWebApplication\\Application\\Application.csproj",
+        "packagesPath": "C:\\Users\\Kupry\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Kupry\\source\\repos\\BooksWebApplication\\Application\\obj\\",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
-        ],
         "configFilePaths": [
-          "C:\\Users\\oleg-k\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Kupry\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -31,8 +28,8 @@
           "netcoreapp3.1": {
             "targetAlias": "netcoreapp3.1",
             "projectReferences": {
-              "d:\\_Projects\\Students\\Books\\Data\\Data.csproj": {
-                "projectPath": "d:\\_Projects\\Students\\Books\\Data\\Data.csproj"
+              "C:\\Users\\Kupry\\source\\repos\\BooksWebApplication\\Data\\Data.csproj": {
+                "projectPath": "C:\\Users\\Kupry\\source\\repos\\BooksWebApplication\\Data\\Data.csproj"
               }
             }
           }
@@ -71,20 +68,17 @@
         }
       }
     },
-    "d:\\_Projects\\Students\\Books\\BooksWebAPI\\BooksWebAPI.csproj": {
+    "C:\\Users\\Kupry\\source\\repos\\BooksWebApplication\\BooksWebAPI\\BooksWebAPI.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "d:\\_Projects\\Students\\Books\\BooksWebAPI\\BooksWebAPI.csproj",
+        "projectUniqueName": "C:\\Users\\Kupry\\source\\repos\\BooksWebApplication\\BooksWebAPI\\BooksWebAPI.csproj",
         "projectName": "BooksWebAPI",
-        "projectPath": "d:\\_Projects\\Students\\Books\\BooksWebAPI\\BooksWebAPI.csproj",
-        "packagesPath": "C:\\Users\\oleg-k\\.nuget\\packages\\",
-        "outputPath": "d:\\_Projects\\Students\\Books\\BooksWebAPI\\obj\\",
+        "projectPath": "C:\\Users\\Kupry\\source\\repos\\BooksWebApplication\\BooksWebAPI\\BooksWebAPI.csproj",
+        "packagesPath": "C:\\Users\\Kupry\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Kupry\\source\\repos\\BooksWebApplication\\BooksWebAPI\\obj\\",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
-        ],
         "configFilePaths": [
-          "C:\\Users\\oleg-k\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Kupry\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -98,8 +92,8 @@
           "net5.0": {
             "targetAlias": "net5.0",
             "projectReferences": {
-              "d:\\_Projects\\Students\\Books\\Application\\Application.csproj": {
-                "projectPath": "d:\\_Projects\\Students\\Books\\Application\\Application.csproj"
+              "C:\\Users\\Kupry\\source\\repos\\BooksWebApplication\\Application\\Application.csproj": {
+                "projectPath": "C:\\Users\\Kupry\\source\\repos\\BooksWebApplication\\Application\\Application.csproj"
               }
             }
           }
@@ -167,20 +161,17 @@
         }
       }
     },
-    "d:\\_Projects\\Students\\Books\\Data\\Data.csproj": {
+    "C:\\Users\\Kupry\\source\\repos\\BooksWebApplication\\Data\\Data.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "d:\\_Projects\\Students\\Books\\Data\\Data.csproj",
+        "projectUniqueName": "C:\\Users\\Kupry\\source\\repos\\BooksWebApplication\\Data\\Data.csproj",
         "projectName": "Data",
-        "projectPath": "d:\\_Projects\\Students\\Books\\Data\\Data.csproj",
-        "packagesPath": "C:\\Users\\oleg-k\\.nuget\\packages\\",
-        "outputPath": "d:\\_Projects\\Students\\Books\\Data\\obj\\",
+        "projectPath": "C:\\Users\\Kupry\\source\\repos\\BooksWebApplication\\Data\\Data.csproj",
+        "packagesPath": "C:\\Users\\Kupry\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Kupry\\source\\repos\\BooksWebApplication\\Data\\obj\\",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
-        ],
         "configFilePaths": [
-          "C:\\Users\\oleg-k\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Kupry\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
