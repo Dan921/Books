@@ -173,3 +173,15 @@ C:\Users\Kupry\source\repos\BooksWebApplication\BooksWebAPI\obj\Debug\net5.0\Raz
 C:\Users\Kupry\source\repos\BooksWebApplication\BooksWebAPI\obj\Debug\net5.0\Razor\Views\Shared\_ValidationScriptsPartial.cshtml.g.cs
 C:\Users\Kupry\source\repos\BooksWebApplication\BooksWebAPI\obj\Debug\net5.0\BooksWebAPI.RazorTargetAssemblyInfo.cs
 C:\Users\Kupry\source\repos\BooksWebApplication\BooksWebAPI\obj\Debug\net5.0\BooksWebAPI.Views.pdb
+d:\_Projects\Students\Books\BooksWebAPI\obj\Debug\net5.0\BooksWebAPI.csprojAssemblyReference.cache
+d:\_Projects\Students\Books\BooksWebAPI\obj\Debug\net5.0\BooksWebAPI.GeneratedMSBuildEditorConfig.editorconfig
+d:\_Projects\Students\Books\BooksWebAPI\obj\Debug\net5.0\BooksWebAPI.AssemblyInfoInputs.cache
+d:\_Projects\Students\Books\BooksWebAPI\obj\Debug\net5.0\BooksWebAPI.AssemblyInfo.cs
+d:\_Projects\Students\Books\BooksWebAPI\obj\Debug\net5.0\BooksWebAPI.csproj.CoreCompileInputs.cache
+d:\_Projects\Students\Books\BooksWebAPI\obj\Debug\net5.0\BooksWebAPI.MvcApplicationPartsAssemblyInfo.cs
+d:\_Projects\Students\Books\BooksWebAPI\obj\Debug\net5.0\BooksWebAPI.MvcApplicationPartsAssemblyInfo.cache
+d:\_Projects\Students\Books\BooksWebAPI\obj\Debug\net5.0\BooksWebAPI.RazorAssemblyInfo.cache
+d:\_Projects\Students\Books\BooksWebAPI\obj\Debug\net5.0\BooksWebAPI.RazorAssemblyInfo.cs
+d:\_Projects\Students\Books\BooksWebAPI\obj\Debug\net5.0\BooksWebAPI.dll
+d:\_Projects\Students\Books\BooksWebAPI\obj\Debug\net5.0\ref\BooksWebAPI.dll
+d:\_Projects\Students\Books\BooksWebAPI\obj\Debug\net5.0\BooksWebAPI.pdb

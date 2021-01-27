@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Application.DAL
 {
@@ -23,9 +24,9 @@ namespace Application.DAL
             context.Books.Remove(book);
         }
 
-        public Book GetBookByID(int bookId)
+        public async Task<Book> GetBookByID(int bookId)
         {
-            return context.Books.Find(bookId);
+            return await context.Books.FindAsync(bookId);
         }
 
         public IEnumerable<Book> GetBooks()
@@ -68,9 +69,9 @@ namespace Application.DAL
             GC.SuppressFinalize(this);
         }
 
-        public bool BookExist(int id)
+        public bool BookExist(Guid id)
         {
-            return context.Books.Any(e => e.BookId == id);
+            return context.Books.Any(e => e.Id == id);
         }
     }
 }

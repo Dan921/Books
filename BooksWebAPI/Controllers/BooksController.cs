@@ -11,7 +11,7 @@ using Application.DAL;
 using BooksWebAPI.Models;
 
 namespace BooksWebAPI.Controllers
-{
+{    
     public class BooksController : Controller
     {
         private IBookRepository bookRepository;
@@ -28,14 +28,14 @@ namespace BooksWebAPI.Controllers
         }
 
         // GET: Books/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(Guid? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var book = bookRepository.GetBookByID((int)id);
+            var book = bookRepository.GetBookByID(id.Value);
             if (book == null)
             {
                 return NotFound();
@@ -67,14 +67,14 @@ namespace BooksWebAPI.Controllers
         }
 
         // GET: Books/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public async Task<IActionResult> Edit(Guid? id)
         {
-            if (id == null)
+            if (!id.HasValue)
             {
                 return NotFound();
             }
 
-            var book = bookRepository.GetBookByID((int)id);
+            var book = await bookRepository.GetBookByID(id.Value);
             if (book == null)
             {
                 return NotFound();
@@ -87,9 +87,9 @@ namespace BooksWebAPI.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("BookId,Name,ShortDescription,CoverImage,PublishingYear,Author")] Book book)
+        public async Task<IActionResult> Edit(Guid id, [Bind("BookId,Name,ShortDescription,CoverImage,PublishingYear,Author")] Book book)
         {
-            if (id != book.BookId)
+            if (id != book.Id)
             {
                 return NotFound();
             }
@@ -103,7 +103,7 @@ namespace BooksWebAPI.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!BookExists(book.BookId))
+                    if (!BookExists(book.Id))
                     {
                         return NotFound();
                     }
@@ -118,14 +118,14 @@ namespace BooksWebAPI.Controllers
         }
 
         // GET: Books/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        public async Task<IActionResult> Delete(Guid? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var book = bookRepository.GetBookByID((int)id);
+            var book = bookRepository.GetBookByID(id.Value) ;
             if (book == null)
             {
                 return NotFound();
@@ -144,7 +144,7 @@ namespace BooksWebAPI.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        private bool BookExists(int id)
+        private bool BookExists(Guid id)
         {
             return bookRepository.BookExist(id);
         }

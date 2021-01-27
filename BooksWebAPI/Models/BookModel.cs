@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace BooksWebAPI.Models
 {
-    public class BookDTO
+    public class BookModel
     {
         public int BookId { get; set; }
         public string Name { get; set; }
