@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "DSJ+YO2jhoYBCtbXFjHYbVcoqTFipGq3A4tCKfDmV1DrvuxSwMqRJl61L+rtN0kcAQbxhX3DO5iwF0djG0sYYQ==",
+  "dgSpecHash": "llK9HzpOVDq/gjcYFXoLDH8vgVfNNTeM/RC6XCYX6g9Bu55O69clRo5oj0HGcDW0PzjVPzO9RHFiF9A+NUdkVg==",
   "success": true,
-  "projectFilePath": "C:\\Users\\Kupry\\source\\repos\\Books\\Data\\Data.csproj",
+  "projectFilePath": "C:\\Users\\Kupry\\OneDrive\\Рабочий стол\\Books\\Data\\Data.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Kupry\\.nuget\\packages\\humanizer.core\\2.8.26\\humanizer.core.2.8.26.nupkg.sha512",
     "C:\\Users\\Kupry\\.nuget\\packages\\microsoft.csharp\\4.7.0\\microsoft.csharp.4.7.0.nupkg.sha512",

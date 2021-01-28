@@ -1,6 +1,6 @@
 using Application.Logic;
 using Data.Context;
-using Data.Repositories;
+using Data.DAL;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -32,7 +32,7 @@ namespace BooksWebAPI
         {
             services.AddDbContext<BooksContext>(item => item.UseSqlServer(Configuration.GetConnectionString("myconn")));
 
-            services.AddScoped<IBookRepository, BookRepository>();
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IBookService, BookService>();
 
             services.AddControllers();

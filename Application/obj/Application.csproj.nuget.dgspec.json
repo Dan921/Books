@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Kupry\\source\\repos\\Books\\Application\\Application.csproj": {}
+    "C:\\Users\\Kupry\\OneDrive\\Рабочий стол\\Books\\Application\\Application.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Kupry\\source\\repos\\Books\\Application\\Application.csproj": {
+    "C:\\Users\\Kupry\\OneDrive\\Рабочий стол\\Books\\Application\\Application.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Kupry\\source\\repos\\Books\\Application\\Application.csproj",
+        "projectUniqueName": "C:\\Users\\Kupry\\OneDrive\\Рабочий стол\\Books\\Application\\Application.csproj",
         "projectName": "Application",
-        "projectPath": "C:\\Users\\Kupry\\source\\repos\\Books\\Application\\Application.csproj",
+        "projectPath": "C:\\Users\\Kupry\\OneDrive\\Рабочий стол\\Books\\Application\\Application.csproj",
         "packagesPath": "C:\\Users\\Kupry\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Kupry\\source\\repos\\Books\\Application\\obj\\",
+        "outputPath": "C:\\Users\\Kupry\\OneDrive\\Рабочий стол\\Books\\Application\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Kupry\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -28,8 +28,8 @@
           "netcoreapp3.1": {
             "targetAlias": "netcoreapp3.1",
             "projectReferences": {
-              "C:\\Users\\Kupry\\source\\repos\\Books\\Data\\Data.csproj": {
-                "projectPath": "C:\\Users\\Kupry\\source\\repos\\Books\\Data\\Data.csproj"
+              "C:\\Users\\Kupry\\OneDrive\\Рабочий стол\\Books\\Data\\Data.csproj": {
+                "projectPath": "C:\\Users\\Kupry\\OneDrive\\Рабочий стол\\Books\\Data\\Data.csproj"
               }
             }
           }
@@ -74,14 +74,14 @@
         }
       }
     },
-    "C:\\Users\\Kupry\\source\\repos\\Books\\Data\\Data.csproj": {
+    "C:\\Users\\Kupry\\OneDrive\\Рабочий стол\\Books\\Data\\Data.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Kupry\\source\\repos\\Books\\Data\\Data.csproj",
+        "projectUniqueName": "C:\\Users\\Kupry\\OneDrive\\Рабочий стол\\Books\\Data\\Data.csproj",
         "projectName": "Data",
-        "projectPath": "C:\\Users\\Kupry\\source\\repos\\Books\\Data\\Data.csproj",
+        "projectPath": "C:\\Users\\Kupry\\OneDrive\\Рабочий стол\\Books\\Data\\Data.csproj",
         "packagesPath": "C:\\Users\\Kupry\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Kupry\\source\\repos\\Books\\Data\\obj\\",
+        "outputPath": "C:\\Users\\Kupry\\OneDrive\\Рабочий стол\\Books\\Data\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Kupry\\AppData\\Roaming\\NuGet\\NuGet.Config",

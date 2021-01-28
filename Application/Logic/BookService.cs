@@ -1,6 +1,6 @@
 ﻿using Application.Models;
 using Data.Context;
-using Data.Repositories;
+using Data.DAL;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,22 +11,22 @@ namespace Application.Logic
 {
     public class BookService : IBookService
     {
-        private readonly IBookRepository bookRepository;
+        private readonly IUnitOfWork unitOfWork;
 
-        public BookService(IBookRepository bookRepository)
+        public BookService(IUnitOfWork unitOfWork)
         {
-            this.bookRepository = bookRepository;
+            this.unitOfWork = unitOfWork;
         }
 
         public async Task<bool> BookExist(Guid id)
         {
-            var books = await bookRepository.GetBooks();
+            var books = await unitOfWork.BookRepository.GetAll();
             return books.Any(b => b.Id == id);
         }
 
         public async Task<BookDetailModel> GetBookById(Guid id)
         {
-            var book = await bookRepository.GetBookById(id);
+            var book = await unitOfWork.BookRepository.GetById(id);
             var BookDetailModel = new BookDetailModel
             {
                 Id = book.Id,
@@ -38,7 +38,7 @@ namespace Application.Logic
 
         public async Task<IEnumerable<BookShortModel>> GetBooks()
         {
-            var books = await bookRepository.GetBooks();
+            var books = await unitOfWork.BookRepository.GetAll();
             var BookShortModels = books.Select(p => new BookShortModel
             {
                 Id = p.Id,
@@ -52,8 +52,8 @@ namespace Application.Logic
         {
             try
             {
-                await bookRepository.InsertBook(book);
-                await bookRepository.Save();
+                await unitOfWork.BookRepository.Insert(book);
+                await unitOfWork.Save();
             }
             catch
             {
@@ -65,8 +65,8 @@ namespace Application.Logic
         {
             try
             {
-                await bookRepository.UpdateBook(book);
-                await bookRepository.Save();
+                await unitOfWork.BookRepository.Update(book);
+                await unitOfWork.Save();
             }
             catch
             {
@@ -78,8 +78,8 @@ namespace Application.Logic
         {
             try
             {
-                await bookRepository.DeleteBook(Id);
-                await bookRepository.Save();
+                await unitOfWork.BookRepository.Delete(Id);
+                await unitOfWork.Save();
             }
             catch
             {

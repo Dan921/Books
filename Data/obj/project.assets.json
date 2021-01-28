@@ -5802,11 +5802,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Kupry\\source\\repos\\Books\\Data\\Data.csproj",
+      "projectUniqueName": "C:\\Users\\Kupry\\OneDrive\\Рабочий стол\\Books\\Data\\Data.csproj",
       "projectName": "Data",
-      "projectPath": "C:\\Users\\Kupry\\source\\repos\\Books\\Data\\Data.csproj",
+      "projectPath": "C:\\Users\\Kupry\\OneDrive\\Рабочий стол\\Books\\Data\\Data.csproj",
       "packagesPath": "C:\\Users\\Kupry\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Kupry\\source\\repos\\Books\\Data\\obj\\",
+      "outputPath": "C:\\Users\\Kupry\\OneDrive\\Рабочий стол\\Books\\Data\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\Kupry\\AppData\\Roaming\\NuGet\\NuGet.Config",

@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "uvAIyWOyg54YPpxA+quzDZswoHPec3TznMACy+K1QCaQuPPyGcchDRLH+b7sh+Wdj8Z0xVAOSubU2aposAS42w==",
+  "dgSpecHash": "a32F8EGM5pPf0wUaFY0MPy5wfVwdYOFwlOUHhRt7Daxh3iSc0TRtLC025eN5yeC5pbvgHpcICSRm0DrkPg2xzA==",
   "success": true,
-  "projectFilePath": "C:\\Users\\Kupry\\source\\repos\\Books\\BooksWebAPI\\BooksWebAPI.csproj",
+  "projectFilePath": "C:\\Users\\Kupry\\OneDrive\\Рабочий стол\\Books\\BooksWebAPI\\BooksWebAPI.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Kupry\\.nuget\\packages\\humanizer.core\\2.8.26\\humanizer.core.2.8.26.nupkg.sha512",
     "C:\\Users\\Kupry\\.nuget\\packages\\microsoft.aspnetcore.html.abstractions\\2.2.0\\microsoft.aspnetcore.html.abstractions.2.2.0.nupkg.sha512",
