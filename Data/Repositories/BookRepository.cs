@@ -1,5 +1,5 @@
 ﻿using Data;
-using Data.Entities;
+using Data.Context;
 using Data.Repositories;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Data.Repositories
 {
-    public class BookRepository : BaseRepository, IBookRepository
+    public class BookRepository : RepositoryBase, IBookRepository
     {
         public BookRepository(BooksContext context)
         {
@@ -22,7 +22,7 @@ namespace Data.Repositories
             return await context.Books.FindAsync(Id);
         }
 
-        public async Task<List<Book>> GetBooks()
+        public async Task<IEnumerable<Book>> GetBooks()
         {
             return await context.Books.ToListAsync();
         }
@@ -37,14 +37,18 @@ namespace Data.Repositories
             await context.SaveChangesAsync();
         }
 
-        public async Task<bool> BookExist(Guid id)
-        {
-            return await context.Books.AnyAsync(e => e.Id == id);
-        }
-
         public async Task UpdateBook(Book book)
         {
             await Task.Run(() => context.Entry(book).State = EntityState.Modified);
+        }
+
+        public async Task DeleteBook(Guid id)
+        {
+            await Task.Run(() =>
+            {
+                var book = context.Books.Find(id);
+                context.Books.Remove(book);
+            });
         }
     }
 }

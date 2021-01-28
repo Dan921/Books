@@ -26,12 +26,10 @@
       "BooksWebAPI/1.0.0": {
         "dependencies": {
           "Application": "1.0.0",
-          "Microsoft.EntityFrameworkCore": "5.0.2",
           "Microsoft.EntityFrameworkCore.SqlServer": "5.0.2",
           "Microsoft.EntityFrameworkCore.Sqlite": "5.0.2",
           "Microsoft.EntityFrameworkCore.Tools": "5.0.2",
           "Microsoft.VisualStudio.Web.CodeGeneration.Design": "5.0.1",
-          "NETStandard.Library": "2.0.3",
           "Swashbuckle.AspNetCore": "5.6.3",
           "Microsoft.AspNetCore.Antiforgery": "5.0.0.0",
           "Microsoft.AspNetCore.Authentication.Abstractions": "5.0.0.0",
@@ -1139,11 +1137,6 @@
           "Microsoft.NETCore.Platforms": "3.1.0"
         }
       },
-      "NETStandard.Library/2.0.3": {
-        "dependencies": {
-          "Microsoft.NETCore.Platforms": "3.1.0"
-        }
-      },
       "Newtonsoft.Json/11.0.2": {
         "runtime": {
           "lib/netstandard2.0/Newtonsoft.Json.dll": {
@@ -2053,7 +2046,7 @@
       "Application/1.0.0": {
         "dependencies": {
           "Data": "1.0.0",
-          "Microsoft.EntityFrameworkCore": "5.0.2"
+          "Microsoft.EntityFrameworkCore.SqlServer": "5.0.2"
         },
         "runtime": {
           "Application.dll": {}
@@ -2064,7 +2057,7 @@
       },
       "Data/1.0.0": {
         "dependencies": {
-          "Microsoft.EntityFrameworkCore": "5.0.2"
+          "Microsoft.EntityFrameworkCore.SqlServer": "5.0.2"
         },
         "runtime": {
           "Data.dll": {}
@@ -4158,13 +4151,6 @@
       "sha512": "sha512-mtVirZr++rq+XCDITMUdnETD59XoeMxSpLRIII7JRI6Yj0LEDiO1pPn0ktlnIj12Ix8bfvQqQDMMIF9wC98oCA==",
       "path": "microsoft.win32.systemevents/4.7.0",
       "hashPath": "microsoft.win32.systemevents.4.7.0.nupkg.sha512"
-    },
-    "NETStandard.Library/2.0.3": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-st47PosZSHrjECdjeIzZQbzivYBJFv6P2nv4cj2ypdI204DO+vZ7l5raGMiX4eXMJ53RfOIg+/s4DHVZ54Nu2A==",
-      "path": "netstandard.library/2.0.3",
-      "hashPath": "netstandard.library.2.0.3.nupkg.sha512"
     },
     "Newtonsoft.Json/11.0.2": {
       "type": "package",

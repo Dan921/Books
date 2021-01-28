@@ -1,4 +1,6 @@
-using Data;
+using Application.Logic;
+using Data.Context;
+using Data.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -28,8 +30,10 @@ namespace BooksWebAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<BooksContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            services.AddDbContext<BooksContext>(item => item.UseSqlServer(Configuration.GetConnectionString("myconn")));
+
+            services.AddScoped<IBookRepository, BookRepository>();
+            services.AddScoped<IBookService, BookService>();
 
             services.AddControllers();
             services.AddSwaggerGen(c =>

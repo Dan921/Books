@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "T2z5pKugT0pwP6pv6fXHS80tVWTI5lsXasmJZKTS5cFNgB1i249iw2ZvLG4L+JUCuItH/N1O3gRcjrIdR8Qa8A==",
+  "dgSpecHash": "uvAIyWOyg54YPpxA+quzDZswoHPec3TznMACy+K1QCaQuPPyGcchDRLH+b7sh+Wdj8Z0xVAOSubU2aposAS42w==",
   "success": true,
-  "projectFilePath": "C:\\Users\\Kupry\\source\\repos\\BooksWebApplication\\BooksWebAPI\\BooksWebAPI.csproj",
+  "projectFilePath": "C:\\Users\\Kupry\\source\\repos\\Books\\BooksWebAPI\\BooksWebAPI.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Kupry\\.nuget\\packages\\humanizer.core\\2.8.26\\humanizer.core.2.8.26.nupkg.sha512",
     "C:\\Users\\Kupry\\.nuget\\packages\\microsoft.aspnetcore.html.abstractions\\2.2.0\\microsoft.aspnetcore.html.abstractions.2.2.0.nupkg.sha512",
@@ -60,7 +60,6 @@
     "C:\\Users\\Kupry\\.nuget\\packages\\microsoft.visualstudio.web.codegenerators.mvc\\5.0.1\\microsoft.visualstudio.web.codegenerators.mvc.5.0.1.nupkg.sha512",
     "C:\\Users\\Kupry\\.nuget\\packages\\microsoft.win32.registry\\4.7.0\\microsoft.win32.registry.4.7.0.nupkg.sha512",
     "C:\\Users\\Kupry\\.nuget\\packages\\microsoft.win32.systemevents\\4.7.0\\microsoft.win32.systemevents.4.7.0.nupkg.sha512",
-    "C:\\Users\\Kupry\\.nuget\\packages\\netstandard.library\\2.0.3\\netstandard.library.2.0.3.nupkg.sha512",
     "C:\\Users\\Kupry\\.nuget\\packages\\newtonsoft.json\\11.0.2\\newtonsoft.json.11.0.2.nupkg.sha512",
     "C:\\Users\\Kupry\\.nuget\\packages\\runtime.native.system\\4.3.0\\runtime.native.system.4.3.0.nupkg.sha512",
     "C:\\Users\\Kupry\\.nuget\\packages\\sqlitepclraw.bundle_e_sqlite3\\2.0.4\\sqlitepclraw.bundle_e_sqlite3.2.0.4.nupkg.sha512",

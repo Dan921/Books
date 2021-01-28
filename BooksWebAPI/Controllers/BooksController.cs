@@ -5,9 +5,10 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Data;
-using Data.Entities;
+using Data.Context;
 using Data.Repositories;
+using Application.Logic;
+using Application.Models;
 
 namespace BooksWebAPI.Controllers
 {
@@ -15,25 +16,26 @@ namespace BooksWebAPI.Controllers
     [ApiController]
     public class BooksController : ControllerBase
     {
-        private IBookRepository bookRepository;
+        private readonly IBookService bookService;
 
-        public BooksController(IBookRepository bookRepository)
+        public BooksController(IBookService bookService)
         {
-            this.bookRepository = bookRepository;
+            this.bookService = bookService;
         }
 
         // GET: api/Books
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Book>>> GetBooks()
+        public async Task<ActionResult<IEnumerable<BookShortModel>>> GetBooks()
         {
-            return await bookRepository.GetBooks();
+            var books = await bookService.GetBooks();
+            return books.ToList();
         }
 
         // GET: api/Books/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Book>> GetBook(Guid id)
+        public async Task<ActionResult<BookDetailModel>> GetBook(Guid id)
         {
-            var book = await bookRepository.GetBookById(id);
+            var book = await bookService.GetBookById(id);
 
             if (book == null)
             {
@@ -53,15 +55,13 @@ namespace BooksWebAPI.Controllers
                 return BadRequest();
             }
 
-            await bookRepository.UpdateBook(book);
-
             try
             {
-                await bookRepository.Save();
+                await bookService.UpdateBook(book);
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!BookExists(id).Result)
+                if (!await bookService.BookExist(id))
                 {
                     return NotFound();
                 }
@@ -79,15 +79,43 @@ namespace BooksWebAPI.Controllers
         [HttpPost]
         public async Task<ActionResult<Book>> PostBook(Book book)
         {
-            await bookRepository.InsertBook(book);
-            await bookRepository.Save();
+            if(book == null)
+            {
+                return NotFound();
+            }
+
+            try
+            {
+                await bookService.InsertBook(book);
+            }
+            catch
+            {
+                throw;
+            }
 
             return CreatedAtAction("GetBook", new { id = book.Id }, book);
         }
 
-        private async Task<bool> BookExists(Guid id)
+        // DELETE: api/Books1/5
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteBook(Guid id)
         {
-            return await bookRepository.BookExist(id);
+            var book = await bookService.GetBookById(id);
+            if (book == null)
+            {
+                return NotFound();
+            }
+
+            try
+            {
+                await bookService.DeleteBook(id);
+            }
+            catch
+            {
+                throw;
+            }
+
+            return NoContent();
         }
     }
 }
