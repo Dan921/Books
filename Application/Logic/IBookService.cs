@@ -11,9 +11,9 @@ namespace Application.Logic
     {
         Task<IEnumerable<BookShortModel>> GetBooks();
         Task<BookDetailModel> GetBookById(Guid id);
-        Task InsertBook(Book book);
-        Task UpdateBook(Book book);
-        Task DeleteBook(Guid Id);
+        Task<bool> InsertBook(Book book);
+        Task<bool> UpdateBook(Book book);
+        Task<bool> DeleteBook(Guid Id);
         Task<bool> BookExist(Guid id);
     }
 }

@@ -27,13 +27,20 @@ namespace Application.Logic
         public async Task<BookDetailModel> GetBookById(Guid id)
         {
             var book = await unitOfWork.BookRepository.GetById(id);
-            var BookDetailModel = new BookDetailModel
+            if (book != null)
             {
-                Id = book.Id,
-                Name = book.Name,
-                LongDescription = book.LongDescription
-            };
-            return BookDetailModel;
+                var bookDetailModel = new BookDetailModel
+                {
+                    Id = book.Id,
+                    Name = book.Name,
+                    LongDescription = book.LongDescription
+                };
+                return bookDetailModel;
+            }
+            else
+            {
+                return null;
+            }
         }
 
         public async Task<IEnumerable<BookShortModel>> GetBooks()
@@ -48,42 +55,49 @@ namespace Application.Logic
             return BookShortModels;
         }
 
-        public async Task InsertBook(Book book)
+        public async Task<bool> InsertBook(Book book)
         {
             try
             {
                 await unitOfWork.BookRepository.Insert(book);
                 await unitOfWork.Save();
+                return true;
             }
             catch
             {
-                throw;
+                return false;
             }
         }
 
-        public async Task UpdateBook(Book book)
+        public async Task<bool> UpdateBook(Book book)
         {
+            if(!await BookExist(book.Id))
+            {
+                return false;
+            }
             try
             {
                 await unitOfWork.BookRepository.Update(book);
                 await unitOfWork.Save();
+                return true;
             }
             catch
             {
-                throw;
+                return false;
             }
         }
 
-        public async Task DeleteBook(Guid Id)
+        public async Task<bool> DeleteBook(Guid Id)
         {
             try
             {
                 await unitOfWork.BookRepository.Delete(Id);
                 await unitOfWork.Save();
+                return true;
             }
             catch
             {
-                throw;
+                return false;
             }
         }
     }

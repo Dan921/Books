@@ -27,7 +27,11 @@ namespace BooksWebAPI.Controllers
         public async Task<ActionResult<IEnumerable<BookShortModel>>> GetBooks()
         {
             var books = await bookService.GetBooks();
-            return books.ToList();
+            if(books == null)
+            {
+                return NotFound();
+            }
+            return Ok(books.ToList());
         }
 
         // GET: api/Books/5
@@ -35,13 +39,11 @@ namespace BooksWebAPI.Controllers
         public async Task<ActionResult<BookDetailModel>> GetBook(Guid id)
         {
             var book = await bookService.GetBookById(id);
-
             if (book == null)
             {
                 return NotFound();
             }
-
-            return book;
+            return Ok(book);
         }
 
         // PUT: api/Books/5
@@ -53,24 +55,19 @@ namespace BooksWebAPI.Controllers
             {
                 return BadRequest();
             }
-
             try
             {
-                await bookService.UpdateBook(book);
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!await bookService.BookExist(id))
+                var isBookUpdated = await bookService.UpdateBook(book);
+                if (isBookUpdated == false)
                 {
                     return NotFound();
                 }
-                else
-                {
-                    throw;
-                }
+                return Ok();
             }
-
-            return NoContent();
+            catch (DbUpdateConcurrencyException)
+            {
+                return BadRequest();
+            }
         }
 
         // POST: api/Books
@@ -82,17 +79,15 @@ namespace BooksWebAPI.Controllers
             {
                 return NotFound();
             }
-
-            try
+            var isBookCreated = await bookService.InsertBook(book);
+            if (isBookCreated == false)
             {
-                await bookService.InsertBook(book);
+                return BadRequest();
             }
-            catch
+            else
             {
-                throw;
+                return CreatedAtAction("GetBook", new { id = book.Id }, book);
             }
-
-            return CreatedAtAction("GetBook", new { id = book.Id }, book);
         }
 
         // DELETE: api/Books1/5
@@ -104,17 +99,15 @@ namespace BooksWebAPI.Controllers
             {
                 return NotFound();
             }
-
-            try
+            var isBookDeleted = await bookService.DeleteBook(id);
+            if(isBookDeleted == false)
             {
-                await bookService.DeleteBook(id);
+                return BadRequest();
             }
-            catch
+            else
             {
-                throw;
+                return Ok();
             }
-
-            return NoContent();
         }
     }
 }

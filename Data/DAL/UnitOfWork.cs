@@ -12,7 +12,7 @@ namespace Data.DAL
         private GenericRepository<Book> bookRepository;
 
         public UnitOfWork(BooksContext context)
-        {
+        {        
             this.context = context;
         }
 

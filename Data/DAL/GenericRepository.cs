@@ -37,11 +37,8 @@ namespace Data.DAL
 
         public async Task Delete(Guid id)
         {
-            await Task.Run(() =>
-            {
-                TEntity entityToDelete = dbSet.Find(id);
-                dbSet.Remove(entityToDelete);
-            });
+            TEntity entityToDelete = await dbSet.FindAsync(id);
+            dbSet.Remove(entityToDelete);
         }
 
         public async Task Update(TEntity entityToUpdate)
