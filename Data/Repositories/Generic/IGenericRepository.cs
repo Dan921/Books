@@ -12,5 +12,6 @@ namespace Data.DAL
         Task Insert(TEntity entity);
         Task Delete(Guid id);
         Task Update(TEntity entity);
+        Task Save();
     }
 }

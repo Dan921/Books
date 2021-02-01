@@ -12,5 +12,9 @@ namespace Application.Models
         public string Name { get; set; }
 
         public string LongDescription { get; set; }
+
+        public int PublishingYear { get; set; }
+
+        public string AuthorFullName { get; set; }
     }
 }

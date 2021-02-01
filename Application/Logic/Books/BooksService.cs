@@ -13,29 +13,31 @@ namespace Application.Logic
 {
     public class BooksService : IBooksService
     {
-        private readonly IUnitOfWork unitOfWork;
+        private readonly IBooksRepository bookRepository;
 
-        public BooksService(IUnitOfWork unitOfWork)
+        public BooksService(IBooksRepository bookRepository)
         {
-            this.unitOfWork = unitOfWork;
+            this.bookRepository = bookRepository;
         }
 
         public async Task<bool> IsBookExist(Guid id)
         {
-            var books = await unitOfWork.BookRepository.GetAll();
+            var books = await bookRepository.GetAll();
             return books.Any(b => b.Id == id);
         }
 
         public async Task<BookDetailModel> GetBookById(Guid id)
         {
-            var book = await unitOfWork.BookRepository.GetById(id);
+            var book = await bookRepository.GetById(id);
             if (book != null)
             {
                 var bookDetailModel = new BookDetailModel
                 {
                     Id = book.Id,
                     Name = book.Name,
-                    LongDescription = book.LongDescription
+                    LongDescription = book.LongDescription,
+                    PublishingYear = book.PublishingYear,
+                    AuthorFullName = book.Author.FullName
                 };
                 return bookDetailModel;
             }
@@ -47,7 +49,7 @@ namespace Application.Logic
 
         public async Task<IEnumerable<BookShortModel>> GetBooks()
         {
-            var books = await unitOfWork.BookRepository.GetAll();
+            var books = await bookRepository.GetAll();
             var BookShortModels = books.Select(p => new BookShortModel
             {
                 Id = p.Id,
@@ -61,8 +63,8 @@ namespace Application.Logic
         {
             try
             {
-                await unitOfWork.BookRepository.Insert(book);
-                await unitOfWork.Save();
+                await bookRepository.Insert(book);
+                await bookRepository.Save();
                 return true;
             }
             catch
@@ -75,8 +77,8 @@ namespace Application.Logic
         {
             try
             {
-                await unitOfWork.BookRepository.Update(book);
-                await unitOfWork.Save();
+                await bookRepository.Update(book);
+                await bookRepository.Save();
                 return book;
             }
             catch
@@ -89,8 +91,8 @@ namespace Application.Logic
         {
             try
             {
-                await unitOfWork.BookRepository.Delete(Id);
-                await unitOfWork.Save();
+                await bookRepository.Delete(Id);
+                await bookRepository.Save();
                 return true;
             }
             catch
@@ -103,12 +105,12 @@ namespace Application.Logic
         {
             try
             {
-                var book = await unitOfWork.BookRepository.GetById(id);
+                var book = await bookRepository.GetById(id);
                 if (book != null)
                 {
-                    book.CoverImage = ImageConverter.ConvertToByteArray(file);
-                    await unitOfWork.BookRepository.Update(book);
-                    await unitOfWork.Save();
+                    book.CoverImage = CoverImageConverter.ConvertToByteArray(file);
+                    await bookRepository.Update(book);
+                    await bookRepository.Save();
                 }
                 return book;
             }
@@ -120,7 +122,7 @@ namespace Application.Logic
 
         public async Task<byte[]> GetBookCover(Guid id)
         {
-            var book = await unitOfWork.BookRepository.GetById(id);
+            var book = await bookRepository.GetById(id);
             if(book == null)
             {
                 return null;

@@ -1,4 +1,5 @@
 using Application.Logic;
+using Application.Logic.Authors;
 using Data.Context;
 using Data.DAL;
 using Microsoft.AspNetCore.Builder;
@@ -32,8 +33,10 @@ namespace BooksWebAPI
         {
             services.AddDbContext<BooksContext>(item => item.UseSqlServer(Configuration.GetConnectionString("myconn")));
 
-            services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddScoped<IBooksRepository, BooksRepository>();
+            services.AddScoped<IAuthorsRepository, AuthorsRepository>();
             services.AddScoped<IBooksService, BooksService>();
+            services.AddScoped<IAuthorsService, AuthorsService>();
 
             services.AddControllers();
             services.AddSwaggerGen(c =>

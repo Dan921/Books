@@ -52,5 +52,10 @@ namespace Data.DAL
                 context.Entry(entityToUpdate).State = EntityState.Modified;
             });
         }
+
+        public async Task Save()
+        {
+            await context.SaveChangesAsync();
+        }
     }
 }
