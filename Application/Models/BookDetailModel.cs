@@ -13,7 +13,7 @@ namespace Application.Models
 
         public string LongDescription { get; set; }
 
-        public int PublishingYear { get; set; }
+        public DateTime PublishingDate { get; set; }
 
         public string AuthorFullName { get; set; }
     }

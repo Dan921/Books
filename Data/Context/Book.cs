@@ -19,7 +19,17 @@ namespace Data.Context
 
         public byte[] CoverImage { get; set; }
 
-        public int PublishingYear { get; set; }
+        public DateTime PublishingDate { get; set; }
+
+        public float Rating { get; set; }
+
+        public int NumberOfRatings { get; set; }
+
+        public List<BookGenre> Genres { get; set; }
+
+        public List<BookTag> Tags { get; set; }
+
+        public BookStatus BookStatus { get; set; }
 
         [ForeignKey(nameof(AuthorId))]
         public Author Author { get; set; }

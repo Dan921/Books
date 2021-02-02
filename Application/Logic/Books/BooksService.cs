@@ -36,7 +36,7 @@ namespace Application.Logic
                     Id = book.Id,
                     Name = book.Name,
                     LongDescription = book.LongDescription,
-                    PublishingYear = book.PublishingYear,
+                    PublishingDate = book.PublishingDate,
                     AuthorFullName = book.Author.FullName
                 };
                 return bookDetailModel;
