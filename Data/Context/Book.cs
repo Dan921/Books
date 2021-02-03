@@ -19,7 +19,7 @@ namespace Data.Context
 
         public byte[] CoverImage { get; set; }
 
-        public DateTime PublishingDate { get; set; }
+        public DateTime? PublishingDate { get; set; }
 
         public float Rating { get; set; }
 
@@ -31,8 +31,8 @@ namespace Data.Context
 
         public BookStatus BookStatus { get; set; }
 
-        [ForeignKey(nameof(AuthorId))]
+        public BookSeries BookSeries { get; set; }
+
         public Author Author { get; set; }
-        public Guid AuthorId { get; set; }
     }
 }

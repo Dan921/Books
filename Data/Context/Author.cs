@@ -12,6 +12,14 @@ namespace Data.Context
         [Required]
         public string FullName { get; set; }
 
+        public DateTime? BirthDate { get; set; }
+
+        public DateTime? DeathDate { get; set; }
+
+        public string BirthPlace { get; set; }
+
+        public string Biography { get; set; }
+
         public List<Book> Books { get; set; }
     }
 }

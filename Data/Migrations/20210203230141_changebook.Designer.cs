@@ -4,14 +4,16 @@ using Data.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Data.Migrations
 {
     [DbContext(typeof(BooksContext))]
-    partial class BooksContextModelSnapshot : ModelSnapshot
+    [Migration("20210203230141_changebook")]
+    partial class changebook
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -85,9 +87,6 @@ namespace Data.Migrations
                     b.Property<Guid?>("AuthorId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("BookSeriesId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<Guid?>("BookStatusId")
                         .HasColumnType("uniqueidentifier");
 
@@ -117,8 +116,6 @@ namespace Data.Migrations
 
                     b.HasIndex("AuthorId");
 
-                    b.HasIndex("BookSeriesId");
-
                     b.HasIndex("BookStatusId");
 
                     b.ToTable("Books");
@@ -135,21 +132,7 @@ namespace Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("BookGenres");
-                });
-
-            modelBuilder.Entity("Data.Context.BookSeries", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("BookSeries");
+                    b.ToTable("BookGenre");
                 });
 
             modelBuilder.Entity("Data.Context.BookStatus", b =>
@@ -216,10 +199,6 @@ namespace Data.Migrations
                         .WithMany("Books")
                         .HasForeignKey("AuthorId");
 
-                    b.HasOne("Data.Context.BookSeries", null)
-                        .WithMany("Books")
-                        .HasForeignKey("BookSeriesId");
-
                     b.HasOne("Data.Context.BookStatus", "BookStatus")
                         .WithMany("Books")
                         .HasForeignKey("BookStatusId");
@@ -230,11 +209,6 @@ namespace Data.Migrations
                 });
 
             modelBuilder.Entity("Data.Context.Author", b =>
-                {
-                    b.Navigation("Books");
-                });
-
-            modelBuilder.Entity("Data.Context.BookSeries", b =>
                 {
                     b.Navigation("Books");
                 });

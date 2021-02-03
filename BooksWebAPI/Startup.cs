@@ -1,7 +1,9 @@
 using Application.Logic;
 using Application.Logic.Authors;
+using Application.Logic.Series;
 using Data.Context;
 using Data.DAL;
+using Data.Repositories.Series;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -35,8 +37,10 @@ namespace BooksWebAPI
 
             services.AddScoped<IBooksRepository, BooksRepository>();
             services.AddScoped<IAuthorsRepository, AuthorsRepository>();
+            services.AddScoped<ISeriesRepository, SeriesRepository>();
             services.AddScoped<IBooksService, BooksService>();
             services.AddScoped<IAuthorsService, AuthorsService>();
+            services.AddScoped<ISeriesService, SeriesService>();
 
             services.AddControllers();
             services.AddSwaggerGen(c =>
