@@ -1,10 +1,11 @@
-﻿using System;
+﻿using Data.Context;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Data.Context
+namespace Application.Models
 {
-    public class BookGenre
+    public class BookTagModel
     {
         public Guid Id { get; set; }
 

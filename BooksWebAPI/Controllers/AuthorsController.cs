@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Data.Context;
 using Application.Logic.Authors;
+using Application.Models;
 
 namespace BooksWebAPI.Controllers
 {
@@ -23,7 +24,7 @@ namespace BooksWebAPI.Controllers
 
         // GET: api/Authors
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Author>>> GetAuthors()
+        public async Task<ActionResult<IEnumerable<AuthorModel>>> GetAuthors()
         {
             var authors = await authorsService.GetAuthors();
             return Ok(authors.ToList());
@@ -31,7 +32,7 @@ namespace BooksWebAPI.Controllers
 
         // GET: api/Authors/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Author>> GetAuthor(Guid id)
+        public async Task<ActionResult<AuthorModel>> GetAuthor(Guid id)
         {
             var author = await authorsService.GetAuthorById(id);
             if (author == null)
@@ -44,7 +45,7 @@ namespace BooksWebAPI.Controllers
         // PUT: api/Authors/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut]
-        public async Task<IActionResult> PutAuthor(Author author)
+        public async Task<IActionResult> PutAuthor(AuthorModel author)
         {
             try
             {
@@ -64,7 +65,7 @@ namespace BooksWebAPI.Controllers
         // POST: api/Authors
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Author>> PostAuthor(Author author)
+        public async Task<ActionResult<Author>> PostAuthor(AuthorModel author)
         {
             if (author == null)
             {
@@ -99,6 +100,32 @@ namespace BooksWebAPI.Controllers
             {
                 return NotFound();
             }
+        }
+
+        // GET: api/Authors/searchByName?name=data
+
+        [HttpGet("searchByName")]
+        public async Task<ActionResult<IEnumerable<AuthorModel>>> SearchByName(string name)
+        {
+            var authors = await authorsService.SearchAuthorsByName(name);
+            if (authors == null)
+            {
+                return NotFound();
+            }
+            return Ok(authors);
+        }
+
+        // GET: api/Authors/searchByDate?birthDate=data&deathDate=data
+
+        [HttpGet("searchByDate")]
+        public async Task<ActionResult<IEnumerable<AuthorModel>>> SearchByDate(DateTime? birthDate, DateTime? deathDate)
+        {
+            var authors = await authorsService.SearchAuthorsByDate(birthDate, deathDate);
+            if (authors == null)
+            {
+                return NotFound();
+            }
+            return Ok(authors);
         }
     }
 }

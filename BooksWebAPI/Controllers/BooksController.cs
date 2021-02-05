@@ -36,7 +36,7 @@ namespace BooksWebAPI.Controllers
 
         // GET: api/Books/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<BookDetailModel>> GetBook(Guid id)
+        public async Task<ActionResult<BookModel>> GetBook(Guid id)
         {
             var book = await bookService.GetBookById(id);
             if (book == null)
@@ -49,7 +49,7 @@ namespace BooksWebAPI.Controllers
         // PUT: api/Books
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut]
-        public async Task<IActionResult> PutBook(Book book)
+        public async Task<IActionResult> PutBook(BookModel book)
         {
             try
             {
@@ -69,7 +69,7 @@ namespace BooksWebAPI.Controllers
         // POST: api/Books
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<IActionResult> PostBook(Book book)
+        public async Task<IActionResult> PostBook(BookModel book)
         {
             if (book == null)
             {

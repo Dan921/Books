@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Data.Context;
 using Application.Logic.Series;
+using Application.Models;
 
 namespace BooksWebAPI.Controllers
 {
@@ -23,7 +24,7 @@ namespace BooksWebAPI.Controllers
 
         // GET: api/BookSeries
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<BookSeries>>> GetBookSeries()
+        public async Task<ActionResult<IEnumerable<BookSeriesModel>>> GetBookSeries()
         {
             var series = await seriesService.GetSeries();
             return Ok(series.ToList());
@@ -31,7 +32,7 @@ namespace BooksWebAPI.Controllers
 
         // GET: api/BookSeries/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<BookSeries>> GetBookSeriesById(Guid id)
+        public async Task<ActionResult<BookSeriesModel>> GetBookSeriesById(Guid id)
         {
             var series = await seriesService.GetSeriesById(id);
             if (series == null)
@@ -44,7 +45,7 @@ namespace BooksWebAPI.Controllers
         // PUT: api/BookSeries/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut]
-        public async Task<IActionResult> PutBookSeries(BookSeries bookSeries)
+        public async Task<IActionResult> PutBookSeries(BookSeriesModel bookSeries)
         {
             try
             {
@@ -64,7 +65,7 @@ namespace BooksWebAPI.Controllers
         // POST: api/BookSeries
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<BookSeries>> PostBookSeries(BookSeries bookSeries)
+        public async Task<ActionResult<BookSeries>> PostBookSeries(BookSeriesModel bookSeries)
         {
             if (bookSeries == null)
             {

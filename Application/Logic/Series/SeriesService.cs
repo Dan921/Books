@@ -1,7 +1,9 @@
-﻿using Data.Context;
+﻿using Application.Models;
+using Data.Context;
 using Data.Repositories.Series;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -16,18 +18,18 @@ namespace Application.Logic.Series
             this.seriesRepository = seriesRepository;
         }
 
-        public async Task<IEnumerable<BookSeries>> GetSeries()
+        public async Task<IEnumerable<BookSeriesModel>> GetSeries()
         {
-            var series = await seriesRepository.GetAll();
+            var series = (await seriesRepository.GetAll()).Select(p => ModelsHelper.GetBookSeriesModel(p));
             return series;
         }
 
-        public async Task<BookSeries> GetSeriesById(Guid id)
+        public async Task<BookSeriesModel> GetSeriesById(Guid id)
         {
             var series = await seriesRepository.GetById(id);
             if (series != null)
             {
-                return series;
+                return ModelsHelper.GetBookSeriesModel(series);
             }
             else
             {
@@ -35,11 +37,11 @@ namespace Application.Logic.Series
             }
         }
 
-        public async Task<bool> InsertSeries(BookSeries series)
+        public async Task<bool> InsertSeries(BookSeriesModel seriesModel)
         {
             try
             {
-                await seriesRepository.Insert(series);
+                await seriesRepository.Insert(ModelsHelper.GetBookSeriesFromModel(seriesModel));
                 await seriesRepository.Save();
                 return true;
             }
@@ -49,13 +51,13 @@ namespace Application.Logic.Series
             }
         }
 
-        public async Task<BookSeries> UpdateSeries(BookSeries series)
+        public async Task<BookSeriesModel> UpdateSeries(BookSeriesModel seriesModel)
         {
             try
             {
-                await seriesRepository.Update(series);
+                await seriesRepository.Update(ModelsHelper.GetBookSeriesFromModel(seriesModel));
                 await seriesRepository.Save();
-                return series;
+                return seriesModel;
             }
             catch
             {

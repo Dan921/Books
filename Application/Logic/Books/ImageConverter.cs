@@ -3,7 +3,7 @@ using System.IO;
 
 namespace Application.Logic
 {
-    public static class CoverImageConverter
+    public static class ImageConverter
     {
         public static byte[] ConvertToByteArray(IFormFile file)
         {

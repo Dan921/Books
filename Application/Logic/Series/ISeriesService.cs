@@ -1,4 +1,5 @@
-﻿using Data.Context;
+﻿using Application.Models;
+using Data.Context;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -8,10 +9,10 @@ namespace Application.Logic.Series
 {
     public interface ISeriesService
     {
-        Task<IEnumerable<BookSeries>> GetSeries();
-        Task<BookSeries> GetSeriesById(Guid id);
-        Task<bool> InsertSeries(BookSeries author);
-        Task<BookSeries> UpdateSeries(BookSeries author);
+        Task<IEnumerable<BookSeriesModel>> GetSeries();
+        Task<BookSeriesModel> GetSeriesById(Guid id);
+        Task<bool> InsertSeries(BookSeriesModel seriesModel);
+        Task<BookSeriesModel> UpdateSeries(BookSeriesModel seriesModel);
         Task<bool> DeleteSeries(Guid Id);
     }
 }

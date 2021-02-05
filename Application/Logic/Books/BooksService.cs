@@ -26,20 +26,13 @@ namespace Application.Logic
             return books.Any(b => b.Id == id);
         }
 
-        public async Task<BookDetailModel> GetBookById(Guid id)
+        public async Task<BookModel> GetBookById(Guid id)
         {
             var book = await bookRepository.GetById(id);
             if (book != null)
             {
-                var bookDetailModel = new BookDetailModel
-                {
-                    Id = book.Id,
-                    Name = book.Name,
-                    LongDescription = book.LongDescription,
-                    PublishingDate = book.PublishingDate,
-                    AuthorFullName = book.Author.FullName
-                };
-                return bookDetailModel;
+                var bookModel = ModelsHelper.GetBookModel(book); 
+                return bookModel;
             }
             else
             {
@@ -50,20 +43,15 @@ namespace Application.Logic
         public async Task<IEnumerable<BookShortModel>> GetBooks()
         {
             var books = await bookRepository.GetAll();
-            var BookShortModels = books.Select(p => new BookShortModel
-            {
-                Id = p.Id,
-                Name = p.Name,
-                ShortDescription = p.ShortDescription
-            });
+            var BookShortModels = books.Select(p => ModelsHelper.GetBookShortModel(p));
             return BookShortModels;
         }
 
-        public async Task<bool> InsertBook(Book book)
+        public async Task<bool> InsertBook(BookModel bookModel)
         {
             try
             {
-                await bookRepository.Insert(book);
+                await bookRepository.Insert(ModelsHelper.GetBookFromModel(bookModel));
                 await bookRepository.Save();
                 return true;
             }
@@ -73,13 +61,13 @@ namespace Application.Logic
             }
         }
 
-        public async Task<Book> UpdateBook(Book book)
+        public async Task<BookModel> UpdateBook(BookModel bookModel)
         {
             try
             {
-                await bookRepository.Update(book);
+                await bookRepository.Update(ModelsHelper.GetBookFromModel(bookModel));
                 await bookRepository.Save();
-                return book;
+                return bookModel;
             }
             catch
             {
@@ -101,18 +89,18 @@ namespace Application.Logic
             }
         }
 
-        public async Task<Book> UpdateBookCover(Guid id, IFormFile file)
+        public async Task<BookModel> UpdateBookCover(Guid id, IFormFile file)
         {
             try
             {
                 var book = await bookRepository.GetById(id);
                 if (book != null)
                 {
-                    book.CoverImage = CoverImageConverter.ConvertToByteArray(file);
+                    book.CoverImage = ImageConverter.ConvertToByteArray(file);
                     await bookRepository.Update(book);
                     await bookRepository.Save();
                 }
-                return book;
+                return ModelsHelper.GetBookModel(book);
             }
             catch
             {

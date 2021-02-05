@@ -1,4 +1,5 @@
-﻿using Data.Context;
+﻿using Application.Models;
+using Data.Context;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -8,10 +9,12 @@ namespace Application.Logic.Authors
 {
     public interface IAuthorsService
     {
-        Task<IEnumerable<Author>> GetAuthors();
-        Task<Author> GetAuthorById(Guid id);
-        Task<bool> InsertAuthor(Author author);
-        Task<Author> UpdateAuthor(Author author);
+        Task<IEnumerable<AuthorModel>> GetAuthors();
+        Task<AuthorModel> GetAuthorById(Guid id);
+        Task<bool> InsertAuthor(AuthorModel author);
+        Task<AuthorModel> UpdateAuthor(AuthorModel author);
         Task<bool> DeleteAuthor(Guid Id);
+        Task<IEnumerable<AuthorModel>> SearchAuthorsByName(string name);
+        Task<IEnumerable<AuthorModel>> SearchAuthorsByDate(DateTime? birthDate, DateTime? deathDate);
     }
 }

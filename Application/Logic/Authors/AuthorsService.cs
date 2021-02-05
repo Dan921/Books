@@ -1,7 +1,9 @@
-﻿using Data.Context;
+﻿using Application.Models;
+using Data.Context;
 using Data.DAL;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -16,18 +18,18 @@ namespace Application.Logic.Authors
             this.authorRepository = authorRepository;
         }
 
-        public async Task<IEnumerable<Author>> GetAuthors()
+        public async Task<IEnumerable<AuthorModel>> GetAuthors()
         {
-            var authors = await authorRepository.GetAll();
+            var authors = (await authorRepository.GetAll()).Select(p => ModelsHelper.GetAuthorModel(p));
             return authors;
         }
 
-        public async Task<Author> GetAuthorById(Guid id)
+        public async Task<AuthorModel> GetAuthorById(Guid id)
         {
             var author = await authorRepository.GetById(id);
             if (author != null)
             {
-                return author;
+                return ModelsHelper.GetAuthorModel(author);
             }
             else
             {
@@ -35,11 +37,11 @@ namespace Application.Logic.Authors
             }
         }
 
-        public async Task<bool> InsertAuthor(Author author)
+        public async Task<bool> InsertAuthor(AuthorModel authorModel)
         {
             try
             {
-                await authorRepository.Insert(author);
+                await authorRepository.Insert(ModelsHelper.GetAuthorFromModel(authorModel));
                 await authorRepository.Save();
                 return true;
             }
@@ -49,13 +51,13 @@ namespace Application.Logic.Authors
             }
         }
 
-        public async Task<Author> UpdateAuthor(Author author)
+        public async Task<AuthorModel> UpdateAuthor(AuthorModel authorModel)
         {
             try
             {
-                await authorRepository.Update(author);
+                await authorRepository.Update(ModelsHelper.GetAuthorFromModel(authorModel));
                 await authorRepository.Save();
-                return author;
+                return authorModel;
             }
             catch
             {
@@ -75,6 +77,18 @@ namespace Application.Logic.Authors
             {
                 return false;
             }
+        }
+
+        public async Task<IEnumerable<AuthorModel>> SearchAuthorsByName(string name)
+        {
+            var authors = (await authorRepository.SearchByName(name)).Select(p => ModelsHelper.GetAuthorModel(p));
+            return authors;
+        }
+
+        public async Task<IEnumerable<AuthorModel>> SearchAuthorsByDate(DateTime? birthDate, DateTime? deathDate)
+        {
+            var authors = (await authorRepository.SearchByDate(birthDate, deathDate)).Select(p => ModelsHelper.GetAuthorModel(p));
+            return authors;
         }
     }
 }
