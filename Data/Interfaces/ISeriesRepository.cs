@@ -1,7 +1,6 @@
 ﻿using Data.Context;
-using Data.DAL;
 
-namespace Data.Repositories.Series
+namespace Data.Interfaces
 {
     public interface ISeriesRepository : IGenericRepository<BookSeries>
     {

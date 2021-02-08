@@ -4,11 +4,10 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Data.DAL
+namespace Data.Interfaces
 {
     public interface IAuthorsRepository : IGenericRepository<Author>
     {
-        Task<IEnumerable<Author>> SearchByName(string name);
-        Task<IEnumerable<Author>> SearchByDate(DateTime? birthDate, DateTime? deathDate);
+        Task<IEnumerable<Author>> SearchBy(string name, DateTime? birthDate, DateTime? deathDate);
     }
 }

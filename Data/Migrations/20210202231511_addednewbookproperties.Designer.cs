@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Data.Migrations
 {
-    [DbContext(typeof(BooksContext))]
+    [DbContext(typeof(LibraryContext))]
     [Migration("20210202231511_addednewbookproperties")]
     partial class addednewbookproperties
     {

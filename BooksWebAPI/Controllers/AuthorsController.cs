@@ -8,18 +8,19 @@ using Microsoft.EntityFrameworkCore;
 using Data.Context;
 using Application.Logic.Authors;
 using Application.Models;
+using AutoMapper;
 
 namespace BooksWebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
     public class AuthorsController : ControllerBase
-    {
-        private readonly IAuthorsService authorsService;
+    {                                
+        private readonly IAuthorsQueriesService authorsService;
 
-        public AuthorsController(IAuthorsService authorsService)
+        public AuthorsController(IAuthorsQueriesService authorsService)
         {
-            this.authorsService = authorsService;
+            this.authorsService = authorsService;                                                                                       
         }
 
         // GET: api/Authors
@@ -27,7 +28,7 @@ namespace BooksWebAPI.Controllers
         public async Task<ActionResult<IEnumerable<AuthorModel>>> GetAuthors()
         {
             var authors = await authorsService.GetAuthors();
-            return Ok(authors.ToList());
+            return Ok(authors);
         }
 
         // GET: api/Authors/5
@@ -45,10 +46,12 @@ namespace BooksWebAPI.Controllers
         // PUT: api/Authors/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut]
-        public async Task<IActionResult> PutAuthor(AuthorModel author)
+        public async Task<IActionResult> PutAuthor(AuthorModel authorModel)
         {
             try
             {
+                var mapper = new MapperConfiguration(cfg => cfg.CreateMap<AuthorModel, Author>()).CreateMapper();
+                var author = mapper.Map<AuthorModel, Author>(authorModel);
                 var updatedAuthor = await authorsService.UpdateAuthor(author);
                 if (updatedAuthor == null)
                 {
@@ -65,12 +68,14 @@ namespace BooksWebAPI.Controllers
         // POST: api/Authors
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Author>> PostAuthor(AuthorModel author)
+        public async Task<ActionResult<AuthorModel>> PostAuthor(AuthorModel authorModel)
         {
-            if (author == null)
+            if (authorModel == null)
             {
                 return NotFound();
             }
+            var mapper = new MapperConfiguration(cfg => cfg.CreateMap<AuthorModel, Author>()).CreateMapper();
+            var author = mapper.Map<AuthorModel, Author>(authorModel);
             var isAuthorCreated = await authorsService.InsertAuthor(author);
             if (isAuthorCreated == false)
             {
@@ -102,25 +107,12 @@ namespace BooksWebAPI.Controllers
             }
         }
 
-        // GET: api/Authors/searchByName?name=data
+        // GET: api/Authors/searchBy?name=data&birthDate=data&deathDate=data
 
-        [HttpGet("searchByName")]
-        public async Task<ActionResult<IEnumerable<AuthorModel>>> SearchByName(string name)
+        [HttpGet("searchBy")]
+        public async Task<ActionResult<IEnumerable<AuthorModel>>> SearchBy(string name, DateTime? birthDate, DateTime? deathDate)
         {
-            var authors = await authorsService.SearchAuthorsByName(name);
-            if (authors == null)
-            {
-                return NotFound();
-            }
-            return Ok(authors);
-        }
-
-        // GET: api/Authors/searchByDate?birthDate=data&deathDate=data
-
-        [HttpGet("searchByDate")]
-        public async Task<ActionResult<IEnumerable<AuthorModel>>> SearchByDate(DateTime? birthDate, DateTime? deathDate)
-        {
-            var authors = await authorsService.SearchAuthorsByDate(birthDate, deathDate);
+            var authors = await authorsService.SearchBy(name, birthDate, deathDate);
             if (authors == null)
             {
                 return NotFound();

@@ -6,13 +6,11 @@ using System.Threading.Tasks;
 
 namespace Application.Models
 {
-    public class BookModel
+    public class BookDetailModel
     {
         public Guid Id { get; set; }
 
         public string Name { get; set; }
-
-        public string ShortDescription { get; set; }
 
         public string LongDescription { get; set; }
 
@@ -24,14 +22,14 @@ namespace Application.Models
 
         public int NumberOfRatings { get; set; }
 
-        public ICollection<BookGenre> Genres { get; set; }
+        public ICollection<BookGenreModel> Genres { get; set; }
 
-        public ICollection<BookTag> Tags { get; set; }
+        public ICollection<BookTagModel> Tags { get; set; }
 
-        public BookStatus BookStatus { get; set; }
+        public BookStatusModel BookStatus { get; set; }
 
-        public BookSeries BookSeries { get; set; }
+        public BookSeriesModel BookSeries { get; set; }
 
-        public Author Author { get; set; }
+        public AuthorModel Author { get; set; }
     }
 }

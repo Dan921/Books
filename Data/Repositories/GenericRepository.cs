@@ -1,18 +1,19 @@
 ﻿using Data.Context;
+using Data.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Data.DAL
+namespace Data.Repositories
 {
     public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEntity : class
     {
-        protected BooksContext context;
+        protected LibraryContext context;
         internal DbSet<TEntity> dbSet;
 
-        public GenericRepository(BooksContext context)
+        public GenericRepository(LibraryContext context)
         {
             this.context = context;
             dbSet = context.Set<TEntity>();

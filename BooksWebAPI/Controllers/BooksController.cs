@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Data.Context;
 using Application.Logic;
 using Application.Models;
+using AutoMapper;
 
 namespace BooksWebAPI.Controllers
 {
@@ -15,9 +16,9 @@ namespace BooksWebAPI.Controllers
     [ApiController]
     public class BooksController : ControllerBase
     {
-        private readonly IBooksService bookService;
+        private readonly IBooksQueriesService bookService;
 
-        public BooksController(IBooksService bookService)
+        public BooksController(IBooksQueriesService bookService)
         {
             this.bookService = bookService;
         }
@@ -36,7 +37,7 @@ namespace BooksWebAPI.Controllers
 
         // GET: api/Books/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<BookModel>> GetBook(Guid id)
+        public async Task<ActionResult<BookDetailModel>> GetBook(Guid id)
         {
             var book = await bookService.GetBookById(id);
             if (book == null)
@@ -49,10 +50,12 @@ namespace BooksWebAPI.Controllers
         // PUT: api/Books
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut]
-        public async Task<IActionResult> PutBook(BookModel book)
+        public async Task<IActionResult> PutBook(BookDetailModel bookDetailModel)
         {
             try
             {
+                var mapper = new MapperConfiguration(cfg => cfg.CreateMap<BookDetailModel, Book>()).CreateMapper();
+                var book = mapper.Map<BookDetailModel, Book>(bookDetailModel);
                 var updatedBook = await bookService.UpdateBook(book);
                 if (updatedBook == null)
                 {
@@ -69,12 +72,14 @@ namespace BooksWebAPI.Controllers
         // POST: api/Books
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<IActionResult> PostBook(BookModel book)
+        public async Task<IActionResult> PostBook(BookDetailModel bookDetailModel)
         {
-            if (book == null)
+            if (bookDetailModel == null)
             {
                 return NotFound();
             }
+            var mapper = new MapperConfiguration(cfg => cfg.CreateMap<BookDetailModel, Book>()).CreateMapper();
+            var book = mapper.Map<BookDetailModel, Book>(bookDetailModel);
             var isBookCreated = await bookService.InsertBook(book);
             if (isBookCreated == false)
             {
@@ -139,6 +144,59 @@ namespace BooksWebAPI.Controllers
             {
                 return File(cover, "image/png");
             }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddReview(Guid bookId, BookReviewModel bookReviewModel)
+        {
+            if (bookReviewModel == null)
+            {
+                return NotFound();
+            }
+            var mapper = new MapperConfiguration(cfg => cfg.CreateMap<BookReviewModel, BookReview>()).CreateMapper();
+            var bookReview = mapper.Map<BookReviewModel, BookReview>(bookReviewModel);
+            var isReviewCreated = await bookService.AddReview(bookId, bookReview);
+            if (isReviewCreated == false)
+            {
+                return BadRequest();
+            }
+            else
+            {
+                return Ok(bookReviewModel);
+            }
+        }
+
+        [HttpGet("TopRated")]
+        public async Task<IActionResult> GetTopRated()
+        {
+            var books = await bookService.GetTopRated();
+            if (books == null)
+            {
+                return NotFound();
+            }
+            return Ok(books.ToList());
+        }
+
+        [HttpGet("TopByPopularity")]
+        public async Task<IActionResult> GetTopByPopularity()
+        {
+            var books = await bookService.GetTopByNumberOfRatings();
+            if (books == null)
+            {
+                return NotFound();
+            }
+            return Ok(books.ToList());
+        }
+
+        [HttpGet("searchBy")]
+        public async Task<ActionResult<IEnumerable<AuthorModel>>> SearchBy(string BookName, string authorName, string seriesName, int? year, string[] ganreNames, string[] tagNames)
+        {
+            var books = await bookService.SearchBy(BookName, authorName, seriesName, year, ganreNames, tagNames);
+            if (books == null)
+            {
+                return NotFound();
+            }
+            return Ok(books);
         }
     }
 }

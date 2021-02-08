@@ -19,7 +19,7 @@ namespace Data.Context
 
         public byte[] CoverImage { get; set; }
 
-        public DateTime? PublishingDate { get; set; }
+        public DateTime PublishingDate { get; set; }
 
         public float Rating { get; set; }
 
@@ -29,10 +29,12 @@ namespace Data.Context
 
         public ICollection<BookTag> Tags { get; set; }
 
-        public BookStatus BookStatus { get; set; }
+        public ICollection<BookReview> Reviews { get; set; }
+
+        public ICollection<Author> Authors { get; set; }
+
+        public BookStatusModel BookStatus { get; set; }
 
         public BookSeries BookSeries { get; set; }
-
-        public Author Author { get; set; }
     }
 }

@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Data.Migrations
 {
-    [DbContext(typeof(BooksContext))]
+    [DbContext(typeof(LibraryContext))]
     [Migration("20210128102523_initialmigration")]
     partial class initialmigration
     {

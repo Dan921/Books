@@ -1,6 +1,6 @@
 ﻿using Application.Models;
 using Data.Context;
-using Data.DAL;
+using Data.Interfaces;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
@@ -11,28 +11,21 @@ using System.Threading.Tasks;
 
 namespace Application.Logic
 {
-    public class BooksService : IBooksService
+    public class BooksQueriesService : IBooksQueriesService
     {
         private readonly IBooksRepository bookRepository;
 
-        public BooksService(IBooksRepository bookRepository)
+        public BooksQueriesService(IBooksRepository bookRepository)
         {
             this.bookRepository = bookRepository;
         }
 
-        public async Task<bool> IsBookExist(Guid id)
-        {
-            var books = await bookRepository.GetAll();
-            return books.Any(b => b.Id == id);
-        }
-
-        public async Task<BookModel> GetBookById(Guid id)
+        public async Task<Book> GetBookById(Guid id)
         {
             var book = await bookRepository.GetById(id);
             if (book != null)
             {
-                var bookModel = ModelsHelper.GetBookModel(book); 
-                return bookModel;
+                return book;
             }
             else
             {
@@ -40,18 +33,17 @@ namespace Application.Logic
             }
         }
 
-        public async Task<IEnumerable<BookShortModel>> GetBooks()
+        public async Task<IEnumerable<Book>> GetBooks()
         {
             var books = await bookRepository.GetAll();
-            var BookShortModels = books.Select(p => ModelsHelper.GetBookShortModel(p));
-            return BookShortModels;
+            return books;
         }
 
-        public async Task<bool> InsertBook(BookModel bookModel)
+        public async Task<bool> InsertBook(Book book)
         {
             try
             {
-                await bookRepository.Insert(ModelsHelper.GetBookFromModel(bookModel));
+                await bookRepository.Insert(book);
                 await bookRepository.Save();
                 return true;
             }
@@ -61,13 +53,13 @@ namespace Application.Logic
             }
         }
 
-        public async Task<BookModel> UpdateBook(BookModel bookModel)
+        public async Task<Book> UpdateBook(Book book)
         {
             try
             {
-                await bookRepository.Update(ModelsHelper.GetBookFromModel(bookModel));
+                await bookRepository.Update(book);
                 await bookRepository.Save();
-                return bookModel;
+                return book;
             }
             catch
             {
@@ -89,7 +81,7 @@ namespace Application.Logic
             }
         }
 
-        public async Task<BookModel> UpdateBookCover(Guid id, IFormFile file)
+        public async Task<Book> UpdateBookCover(Guid id, IFormFile file)
         {
             try
             {
@@ -100,7 +92,7 @@ namespace Application.Logic
                     await bookRepository.Update(book);
                     await bookRepository.Save();
                 }
-                return ModelsHelper.GetBookModel(book);
+                return book;
             }
             catch
             {
@@ -111,11 +103,48 @@ namespace Application.Logic
         public async Task<byte[]> GetBookCover(Guid id)
         {
             var book = await bookRepository.GetById(id);
-            if(book == null)
+            if (book == null)
             {
                 return null;
             }
             return book.CoverImage;
+        }
+
+        public async Task<bool> AddReview(Guid bookId, BookReview review)
+        {
+            try
+            {
+                var book = bookRepository.GetById(bookId);
+                if (book != null)
+                {
+                    await bookRepository.AddReview(bookId, review);
+                    await bookRepository.Save();
+                    return true;
+                }
+                return false;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        public async Task<IEnumerable<Book>> SearchBy(string BookName, string authorName, string seriesName, int? year, string[] ganreNames, string[] tagNames)
+        {
+            var authors = await bookRepository.SearchBy(BookName, authorName, seriesName, year, ganreNames, tagNames);
+            return authors;
+        }
+
+        public async Task<IEnumerable<Book>> GetTopRated()
+        {
+            var authors = await bookRepository.GetTopRated();
+            return authors;
+        }
+
+        public async Task<IEnumerable<Book>> GetTopByNumberOfRatings()
+        {
+            var authors = await bookRepository.GetTopByNumberOfRatings();
+            return authors;
         }
     }
 }

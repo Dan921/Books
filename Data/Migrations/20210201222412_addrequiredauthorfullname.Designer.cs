@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Data.Migrations
 {
-    [DbContext(typeof(BooksContext))]
+    [DbContext(typeof(LibraryContext))]
     [Migration("20210201222412_addrequiredauthorfullname")]
     partial class addrequiredauthorfullname
     {

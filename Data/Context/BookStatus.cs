@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Data.Context
 {
-    public class BookStatus
+    public class BookStatusModel
     {
         public Guid Id { get; set; }
 

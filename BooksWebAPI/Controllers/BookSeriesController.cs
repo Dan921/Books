@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Data.Context;
 using Application.Logic.Series;
 using Application.Models;
+using AutoMapper;
 
 namespace BooksWebAPI.Controllers
 {
@@ -15,9 +16,9 @@ namespace BooksWebAPI.Controllers
     [ApiController]
     public class BookSeriesController : ControllerBase
     {
-        private readonly ISeriesService seriesService;
+        private readonly IBookSeriesQueriesService seriesService;
 
-        public BookSeriesController(ISeriesService seriesService)
+        public BookSeriesController(IBookSeriesQueriesService seriesService)
         {
             this.seriesService = seriesService;
         }
@@ -45,10 +46,12 @@ namespace BooksWebAPI.Controllers
         // PUT: api/BookSeries/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut]
-        public async Task<IActionResult> PutBookSeries(BookSeriesModel bookSeries)
+        public async Task<IActionResult> PutBookSeries(BookSeriesModel bookSeriesModel)
         {
             try
             {
+                var mapper = new MapperConfiguration(cfg => cfg.CreateMap<BookSeriesModel, BookSeries>()).CreateMapper();
+                var bookSeries = mapper.Map<BookSeriesModel, BookSeries> (bookSeriesModel);
                 var updatedSeries = await seriesService.UpdateSeries(bookSeries);
                 if (updatedSeries == null)
                 {
@@ -65,12 +68,14 @@ namespace BooksWebAPI.Controllers
         // POST: api/BookSeries
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<BookSeries>> PostBookSeries(BookSeriesModel bookSeries)
+        public async Task<ActionResult<BookSeriesModel>> PostBookSeries(BookSeriesModel bookSeriesModel)
         {
-            if (bookSeries == null)
+            if (bookSeriesModel == null)
             {
                 return NotFound();
             }
+            var mapper = new MapperConfiguration(cfg => cfg.CreateMap<BookSeriesModel, BookSeries>()).CreateMapper();
+            var bookSeries = mapper.Map<BookSeriesModel, BookSeries>(bookSeriesModel);
             var isSeriesCreated = await seriesService.InsertSeries(bookSeries);
             if (isSeriesCreated == false)
             {

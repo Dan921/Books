@@ -1,6 +1,6 @@
 ﻿using Application.Models;
 using Data.Context;
-using Data.Repositories.Series;
+using Data.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,27 +9,27 @@ using System.Threading.Tasks;
 
 namespace Application.Logic.Series
 {
-    public class SeriesService : ISeriesService
+    public class BookSeriesQueriesService : IBookSeriesQueriesService
     {
         private readonly ISeriesRepository seriesRepository;
 
-        public SeriesService(ISeriesRepository seriesRepository)
+        public BookSeriesQueriesService(ISeriesRepository seriesRepository)
         {
             this.seriesRepository = seriesRepository;
         }
 
-        public async Task<IEnumerable<BookSeriesModel>> GetSeries()
+        public async Task<IEnumerable<BookSeries>> GetSeries()
         {
-            var series = (await seriesRepository.GetAll()).Select(p => ModelsHelper.GetBookSeriesModel(p));
+            var series = await seriesRepository.GetAll();
             return series;
         }
 
-        public async Task<BookSeriesModel> GetSeriesById(Guid id)
+        public async Task<BookSeries> GetSeriesById(Guid id)
         {
             var series = await seriesRepository.GetById(id);
             if (series != null)
             {
-                return ModelsHelper.GetBookSeriesModel(series);
+                return series;
             }
             else
             {
@@ -37,11 +37,11 @@ namespace Application.Logic.Series
             }
         }
 
-        public async Task<bool> InsertSeries(BookSeriesModel seriesModel)
+        public async Task<bool> InsertSeries(BookSeries series)
         {
             try
             {
-                await seriesRepository.Insert(ModelsHelper.GetBookSeriesFromModel(seriesModel));
+                await seriesRepository.Insert(series);
                 await seriesRepository.Save();
                 return true;
             }
@@ -51,13 +51,13 @@ namespace Application.Logic.Series
             }
         }
 
-        public async Task<BookSeriesModel> UpdateSeries(BookSeriesModel seriesModel)
+        public async Task<BookSeries> UpdateSeries(BookSeries series)
         {
             try
             {
-                await seriesRepository.Update(ModelsHelper.GetBookSeriesFromModel(seriesModel));
+                await seriesRepository.Update(series);
                 await seriesRepository.Save();
-                return seriesModel;
+                return series;
             }
             catch
             {

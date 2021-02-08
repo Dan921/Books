@@ -5,9 +5,9 @@ using System.Text;
 
 namespace Data.Context
 {
-    public class BooksContext : DbContext
+    public class LibraryContext : DbContext
     {
-        public BooksContext(DbContextOptions options) : base(options)
+        public LibraryContext(DbContextOptions options) : base(options)
         {
         }
 
@@ -15,7 +15,7 @@ namespace Data.Context
         public DbSet<Author> Authors { get; set; }
         public DbSet<BookGenre> BookGenres { get; set; }
         public DbSet<BookSeries> BookSeries { get; set; }
-        public DbSet<BookStatus> BookStatus { get; set; }
-        public DbSet<BookTag> BookTag { get; set; }
+        public DbSet<BookStatusModel> BookStatus { get; set; }
+        public DbSet<BookTag> BookTags { get; set; }
     }
 }

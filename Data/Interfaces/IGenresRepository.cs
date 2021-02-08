@@ -3,10 +3,9 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Data.DAL
+namespace Data.Interfaces
 {
-    public interface IBooksRepository : IGenericRepository<Book>
+    public interface IGenresRepository : IGenericRepository<BookGenre>
     {
-
     }
 }
