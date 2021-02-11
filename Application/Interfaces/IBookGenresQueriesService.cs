@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Application.Logic.BookGenres
+namespace Application.Interfaces
 {
     public interface IBookGenresQueriesService
     {

@@ -1,6 +1,5 @@
+using Application.Interfaces;
 using Application.Logic;
-using Application.Logic.Authors;
-using Application.Logic.Series;
 using Data.Context;
 using Data.Interfaces;
 using Data.Repositories;
@@ -38,9 +37,15 @@ namespace BooksWebAPI
             services.AddScoped<IBooksRepository, BooksRepository>();
             services.AddScoped<IAuthorsRepository, AuthorsRepository>();
             services.AddScoped<ISeriesRepository, SeriesRepository>();
+            services.AddScoped<IBookCoverRepository, BookCoverRepository>();
+            services.AddScoped<IGenresRepository, GenresRepository>();
+            services.AddScoped<ITagsRepository, TagsRepository>();
+
             services.AddScoped<IBooksQueriesService, BooksQueriesService>();
             services.AddScoped<IAuthorsQueriesService, AuthorsQueriesService>();
             services.AddScoped<IBookSeriesQueriesService, BookSeriesQueriesService>();
+            services.AddScoped<IBookGenresQueriesService, BookGenresQueriesService>();
+            services.AddScoped<IBookTagsQueriesService, BookTagsQueriesService>();
 
             services.AddControllers();
             services.AddSwaggerGen(c =>

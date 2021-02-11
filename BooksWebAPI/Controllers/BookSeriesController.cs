@@ -6,9 +6,9 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Data.Context;
-using Application.Logic.Series;
 using Application.Models;
 using AutoMapper;
+using Application.Interfaces;
 
 namespace BooksWebAPI.Controllers
 {

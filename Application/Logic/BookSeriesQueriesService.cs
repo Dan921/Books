@@ -1,4 +1,5 @@
-﻿using Application.Models;
+﻿using Application.Interfaces;
+using Application.Models;
 using Data.Context;
 using Data.Interfaces;
 using System;
@@ -7,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Application.Logic.Series
+namespace Application.Logic
 {
     public class BookSeriesQueriesService : IBookSeriesQueriesService
     {

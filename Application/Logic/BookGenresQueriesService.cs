@@ -1,4 +1,5 @@
-﻿using Application.Models;
+﻿using Application.Interfaces;
+using Application.Models;
 using Data.Context;
 using Data.Interfaces;
 using System;
@@ -6,7 +7,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Application.Logic.BookGenres
+namespace Application.Logic
 {
     public class BookGenresQueriesService : IBookGenresQueriesService
     {

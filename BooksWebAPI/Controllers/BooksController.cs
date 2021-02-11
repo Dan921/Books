@@ -10,6 +10,7 @@ using Application.Logic;
 using Application.Models;
 using AutoMapper;
 using Data.Models;
+using Application.Interfaces;
 
 namespace BooksWebAPI.Controllers
 {

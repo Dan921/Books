@@ -6,7 +6,7 @@ using System.Text;
 
 namespace Data.Repositories
 {
-    class TagsRepository : GenericRepository<BookTag>, ITagsRepository
+    public class TagsRepository : GenericRepository<BookTag>, ITagsRepository
     {
         public TagsRepository(LibraryContext context) : base(context)
         {

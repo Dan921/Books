@@ -6,17 +6,17 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Data.Context;
-using Application.Logic.Authors;
 using Application.Models;
 using AutoMapper;
 using Data.Models;
+using Application.Interfaces;
 
 namespace BooksWebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
     public class AuthorsController : ControllerBase
-    {                                
+    {
         private readonly IAuthorsQueriesService authorsService;
 
         public AuthorsController(IAuthorsQueriesService authorsService)
@@ -104,7 +104,7 @@ namespace BooksWebAPI.Controllers
             }
             else
             {
-                return NotFound();
+                return Ok();
             }
         }
 

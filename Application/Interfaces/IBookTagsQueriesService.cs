@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Application.Interfaces
 {
-    interface IBookTagsQueriesService
+    public interface IBookTagsQueriesService
     {
         Task<IEnumerable<BookTag>> GetTags();
         Task<BookTag> GetTagById(Guid id);

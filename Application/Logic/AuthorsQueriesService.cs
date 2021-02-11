@@ -1,4 +1,5 @@
-﻿using Application.Models;
+﻿using Application.Interfaces;
+using Application.Models;
 using Data.Context;
 using Data.Interfaces;
 using Data.Models;
@@ -8,7 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Application.Logic.Authors
+namespace Application.Logic
 {
     public class AuthorsQueriesService : IAuthorsQueriesService
     {
