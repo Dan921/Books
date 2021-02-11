@@ -9,6 +9,7 @@ using Data.Context;
 using Application.Logic;
 using Application.Models;
 using AutoMapper;
+using Data.Models;
 
 namespace BooksWebAPI.Controllers
 {
@@ -188,10 +189,10 @@ namespace BooksWebAPI.Controllers
             return Ok(books.ToList());
         }
 
-        [HttpGet("searchBy")]
-        public async Task<ActionResult<IEnumerable<AuthorModel>>> SearchBy(string BookName, string authorName, string seriesName, int? year, string[] ganreNames, string[] tagNames)
+        [HttpPost("searchBy")]
+        public async Task<ActionResult<IEnumerable<AuthorModel>>> SearchBy([FromBody] BookSearchModel bookSearchModel)
         {
-            var books = await bookService.SearchBy(BookName, authorName, seriesName, year, ganreNames, tagNames);
+            var books = await bookService.SearchBy(bookSearchModel);
             if (books == null)
             {
                 return NotFound();

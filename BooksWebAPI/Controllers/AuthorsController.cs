@@ -9,6 +9,7 @@ using Data.Context;
 using Application.Logic.Authors;
 using Application.Models;
 using AutoMapper;
+using Data.Models;
 
 namespace BooksWebAPI.Controllers
 {
@@ -107,12 +108,10 @@ namespace BooksWebAPI.Controllers
             }
         }
 
-        // GET: api/Authors/searchBy?name=data&birthDate=data&deathDate=data
-
-        [HttpGet("searchBy")]
-        public async Task<ActionResult<IEnumerable<AuthorModel>>> SearchBy(string name, DateTime? birthDate, DateTime? deathDate)
+        [HttpPost("searchBy")]
+        public async Task<ActionResult<IEnumerable<AuthorModel>>> SearchBy([FromBody] AuthorSearchModel authorSearchModel)
         {
-            var authors = await authorsService.SearchBy(name, birthDate, deathDate);
+            var authors = await authorsService.SearchBy(authorSearchModel);
             if (authors == null)
             {
                 return NotFound();

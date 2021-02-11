@@ -1,4 +1,5 @@
 ﻿using Data.Context;
+using Data.Models;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -8,6 +9,6 @@ namespace Data.Interfaces
 {
     public interface IAuthorsRepository : IGenericRepository<Author>
     {
-        Task<IEnumerable<Author>> SearchBy(string name, DateTime? birthDate, DateTime? deathDate);
+        Task<IEnumerable<Author>> SearchBy(AuthorSearchModel authorSearchModel);
     }
 }

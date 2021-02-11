@@ -1,6 +1,7 @@
 ﻿using Application.Models;
 using Data.Context;
 using Data.Interfaces;
+using Data.Models;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
@@ -129,9 +130,9 @@ namespace Application.Logic
             }
         }
 
-        public async Task<IEnumerable<Book>> SearchBy(string BookName, string authorName, string seriesName, int? year, string[] ganreNames, string[] tagNames)
+        public async Task<IEnumerable<Book>> SearchBy(BookSearchModel bookSearchModel)
         {
-            var authors = await bookRepository.SearchBy(BookName, authorName, seriesName, year, ganreNames, tagNames);
+            var authors = await bookRepository.SearchBy(bookSearchModel);
             return authors;
         }
 

@@ -1,5 +1,6 @@
 ﻿using Application.Models;
 using Data.Context;
+using Data.Models;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -14,6 +15,6 @@ namespace Application.Logic.Authors
         Task<bool> InsertAuthor(Author author);
         Task<Author> UpdateAuthor(Author author);
         Task<bool> DeleteAuthor(Guid Id);
-        Task<IEnumerable<Author>> SearchBy(string name, DateTime? birthDate, DateTime? deathDate);
+        Task<IEnumerable<Author>> SearchBy(AuthorSearchModel authorSearchModel);
     }
 }

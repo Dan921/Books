@@ -1,5 +1,6 @@
 ﻿using Data.Context;
 using Data.Interfaces;
+using Data.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -16,29 +17,26 @@ namespace Data.Repositories
             this.context = context;
         }
 
-        public async Task<IEnumerable<Author>> SearchBy(string name, DateTime? birthDate, DateTime? deathDate)
+        public Task<IEnumerable<Author>> SearchBy(AuthorSearchModel authorSearchModel)
         {
             IEnumerable<Author> authors = context.Authors;
-            await Task.Run(() =>
+            if (authorSearchModel.Name != null)
             {
-                if (name != null)
-                {
-                    authors = authors.Where(a => a.FullName.Contains(name));
-                }
-                if (birthDate != null && deathDate != null)
-                {
-                    authors = authors.Where(a => a.BirthDate > birthDate && a.DeathDate < deathDate);
-                }
-                else if (birthDate != null && deathDate == null)
-                {
-                    authors = authors.Where(a => a.BirthDate > birthDate);
-                }
-                else if (birthDate == null && deathDate != null)
-                {
-                    authors = authors.Where(a => a.DeathDate < deathDate);
-                }
-            });
-            return authors;
+                authors = authors.Where(a => a.FullName.Contains(authorSearchModel.Name));
+            }
+            if (authorSearchModel.BirthDate != null && authorSearchModel.DeathDate != null)
+            {
+                authors = authors.Where(a => a.BirthDate > authorSearchModel.BirthDate && a.DeathDate < authorSearchModel.DeathDate);
+            }
+            else if (authorSearchModel.BirthDate != null && authorSearchModel.DeathDate == null)
+            {
+                authors = authors.Where(a => a.BirthDate > authorSearchModel.BirthDate);
+            }
+            else if (authorSearchModel.BirthDate == null && authorSearchModel.DeathDate != null)
+            {
+                authors = authors.Where(a => a.DeathDate < authorSearchModel.DeathDate);
+            }
+            return Task.FromResult(authors);
         }
     }
 }

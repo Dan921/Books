@@ -1,5 +1,6 @@
 ﻿using Application.Models;
 using Data.Context;
+using Data.Models;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
@@ -17,7 +18,7 @@ namespace Application.Logic
         Task<bool> DeleteBook(Guid Id);
         Task<Book> UpdateBookCover(Guid id, IFormFile file);
         Task<byte[]> GetBookCover(Guid id);
-        Task<IEnumerable<Book>> SearchBy(string BookName, string authorName, string seriesName, int? year, string[] ganreNames, string[] tagNames);
+        Task<IEnumerable<Book>> SearchBy(BookSearchModel bookSearchModel);
         Task<IEnumerable<Book>> GetTopRated();
         Task<IEnumerable<Book>> GetTopByNumberOfRatings();
         Task<bool> AddReview(Guid bookId, BookReview review);

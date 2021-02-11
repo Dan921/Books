@@ -1,6 +1,7 @@
 ﻿using Application.Models;
 using Data.Context;
 using Data.Interfaces;
+using Data.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -79,9 +80,9 @@ namespace Application.Logic.Authors
             }
         }
 
-        public async Task<IEnumerable<Author>> SearchBy(string name, DateTime? birthDate, DateTime? deathDate)
+        public async Task<IEnumerable<Author>> SearchBy(AuthorSearchModel authorSearchModel)
         {
-            var authors = await authorsRepository.SearchBy(name, birthDate, deathDate);
+            var authors = await authorsRepository.SearchBy(authorSearchModel);
             return authors;
         }
     }
