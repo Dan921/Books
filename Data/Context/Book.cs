@@ -17,8 +17,6 @@ namespace Data.Context
 
         public string LongDescription { get; set; }
 
-        public byte[] CoverImage { get; set; }
-
         public DateTime PublishingDate { get; set; }
 
         public float Rating { get; set; }

@@ -108,7 +108,7 @@ namespace BooksWebAPI.Controllers
             }
             else
             {
-                return NotFound();
+                return Ok();
             }
         }
 
@@ -145,6 +145,21 @@ namespace BooksWebAPI.Controllers
             {
                 return File(cover, "image/png");
             }
+        }
+
+        [HttpDelete("{id}/cover")]
+        public async Task<IActionResult> DeleteBookCover(Guid Id)
+        {
+            if (bookService.IsBookCoverExist(Id).Result)
+            {
+                var isBookDeleted = await bookService.DeleteBookCover(Id);
+                if (isBookDeleted == false)
+                {
+                    return BadRequest();
+                }
+                return Ok();
+            }
+            return NotFound();
         }
 
         [HttpPost]

@@ -15,10 +15,12 @@ namespace Application.Logic
     public class BooksQueriesService : IBooksQueriesService
     {
         private readonly IBooksRepository bookRepository;
+        private readonly IBookCoverRepository bookCoverRepository;
 
-        public BooksQueriesService(IBooksRepository bookRepository)
+        public BooksQueriesService(IBooksRepository bookRepository, IBookCoverRepository bookCoverRepository)
         {
             this.bookRepository = bookRepository;
+            this.bookCoverRepository = bookCoverRepository;
         }
 
         public async Task<Book> GetBookById(Guid id)
@@ -82,18 +84,31 @@ namespace Application.Logic
             }
         }
 
-        public async Task<Book> UpdateBookCover(Guid id, IFormFile file)
+        public async Task<BookCover> UpdateBookCover(Guid Id, IFormFile file)
         {
             try
             {
-                var book = await bookRepository.GetById(id);
+                var book = await bookRepository.GetById(Id);
                 if (book != null)
                 {
-                    book.CoverImage = ImageConverter.ConvertToByteArray(file);
-                    await bookRepository.Update(book);
-                    await bookRepository.Save();
+                    var bookCover = await bookCoverRepository.GetById(Id);
+                    if(bookCover == null)
+                    {
+                        await bookCoverRepository.Insert(new BookCover() { Id = book.Id, CoverImage = ImageConverter.ConvertToByteArray(file) });
+                        await bookCoverRepository.Save();
+                    }
+                    else
+                    {
+                        bookCover.CoverImage = ImageConverter.ConvertToByteArray(file);
+                        await bookCoverRepository.Update(bookCover);
+                        await bookCoverRepository.Save();
+                    }
+                    return bookCover;
                 }
-                return book;
+                else
+                {
+                    return null;
+                }
             }
             catch
             {
@@ -101,14 +116,33 @@ namespace Application.Logic
             }
         }
 
-        public async Task<byte[]> GetBookCover(Guid id)
+        public async Task<byte[]> GetBookCover(Guid Id)
         {
-            var book = await bookRepository.GetById(id);
-            if (book == null)
+            var bookCover = await bookCoverRepository.GetById(Id);
+            if (bookCover == null)
             {
                 return null;
             }
-            return book.CoverImage;
+            return bookCover.CoverImage;
+        }
+
+        public async Task<bool> DeleteBookCover(Guid Id)
+        {
+            try
+            {
+                await bookCoverRepository.Delete(Id);
+                await bookCoverRepository.Save();
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        public Task<bool> IsBookCoverExist(Guid Id)
+        {
+            return Task.FromResult(bookCoverRepository.GetById(Id) != null);
         }
 
         public async Task<bool> AddReview(Guid bookId, BookReview review)

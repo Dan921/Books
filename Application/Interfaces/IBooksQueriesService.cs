@@ -16,8 +16,10 @@ namespace Application.Logic
         Task<bool> InsertBook(Book book);
         Task<Book> UpdateBook(Book book);
         Task<bool> DeleteBook(Guid Id);
-        Task<Book> UpdateBookCover(Guid id, IFormFile file);
+        Task<BookCover> UpdateBookCover(Guid id, IFormFile file);
         Task<byte[]> GetBookCover(Guid id);
+        Task<bool> DeleteBookCover(Guid Id);
+        Task<bool> IsBookCoverExist(Guid Id);
         Task<IEnumerable<Book>> SearchBy(BookSearchModel bookSearchModel);
         Task<IEnumerable<Book>> GetTopRated();
         Task<IEnumerable<Book>> GetTopByNumberOfRatings();
