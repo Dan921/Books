@@ -11,8 +11,9 @@ using Application.Models;
 using AutoMapper;
 using Data.Models;
 using Application.Interfaces;
+using Application.ViewModels;
 
-namespace BooksWebAPI.Controllers
+namespace BooksWeb.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -29,14 +30,34 @@ namespace BooksWebAPI.Controllers
 
         // GET: api/Books
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<BookShortModel>>> GetBooks()
+        [HttpPost]
+        public async Task<ActionResult<BooksViewModel>> GetBooks([FromBody] BookSearchModel bookSearchModel, int page = 1)
         {
-            var books = await bookService.GetBooks();
-            if (books == null)
+            int pageSize = 10;
+            IQueryable<BookShortModel> books;
+            if (bookSearchModel != null)
             {
-                return NotFound();
+                books = mapper.Map<IQueryable<BookShortModel>>(await bookService.SearchBy(bookSearchModel));
+                if (books == null)
+                {
+                    return NotFound();
+                }
             }
-            return Ok(books.ToList());
+            else
+            {
+                books = mapper.Map<IQueryable<BookShortModel>>(await bookService.GetBooks());
+            }
+
+            var count = await books.CountAsync();
+            var items = await books.Skip((page - 1) * pageSize).Take(pageSize).ToListAsync();
+
+            PageViewModel pageViewModel = new PageViewModel(count, page, pageSize);
+            BooksViewModel viewModel = new BooksViewModel
+            {
+                PageViewModel = pageViewModel,
+                books = items
+            };
+            return Ok(viewModel);
         }
 
         // GET: api/Books/5
@@ -166,7 +187,7 @@ namespace BooksWebAPI.Controllers
             return NotFound();
         }
 
-        [HttpPost]
+        [HttpPost("AddReview")]
         public async Task<IActionResult> AddReview(Guid bookId, BookReviewModel bookReviewModel)
         {
             if (bookReviewModel == null)
@@ -207,17 +228,6 @@ namespace BooksWebAPI.Controllers
                 return NotFound();
             }
             return Ok(books.ToList());
-        }
-
-        [HttpPost("searchBy")]
-        public async Task<ActionResult<IEnumerable<AuthorModel>>> SearchBy([FromBody] BookSearchModel bookSearchModel)
-        {
-            var books = await bookService.SearchBy(bookSearchModel);
-            if (books == null)
-            {
-                return NotFound();
-            }
-            return Ok(books);
         }
     }
 }

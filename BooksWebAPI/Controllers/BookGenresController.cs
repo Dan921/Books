@@ -11,7 +11,7 @@ using Application.Models;
 using AutoMapper;
 using Application.Logic;
 
-namespace BooksWebAPI.Controllers
+namespace BooksWeb.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]

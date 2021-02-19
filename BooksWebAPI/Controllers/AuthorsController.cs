@@ -11,8 +11,9 @@ using Data.Models;
 using AutoMapper;
 using Application.Interfaces;
 using Application.Logic;
+using Application.ViewModels;
 
-namespace BooksWebAPI.Controllers
+namespace BooksWeb.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -28,11 +29,34 @@ namespace BooksWebAPI.Controllers
         }
 
         // GET: api/Authors
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<AuthorModel>>> GetAuthors()
+        [HttpPost]
+        public async Task<ActionResult<AuthorsViewModel>> GetAuthors([FromBody] AuthorSearchModel authorSearchModel, int page = 1)
         {
-            var authors = await authorsService.GetAuthors();
-            return Ok(authors);
+            int pageSize = 10;
+            IQueryable<AuthorModel> authors;
+            if (authorSearchModel != null)
+            {
+                authors = mapper.Map<IQueryable<AuthorModel>>( await authorsService.SearchBy(authorSearchModel));
+                if (authors == null)
+                {
+                    return NotFound();
+                }
+            }
+            else
+            {
+                authors = mapper.Map<IQueryable<AuthorModel>>(await authorsService.GetAuthors());
+            }
+
+            var count = await authors.CountAsync();
+            var items = await authors.Skip((page - 1) * pageSize).Take(pageSize).ToListAsync();
+
+            PageViewModel pageViewModel = new PageViewModel(count, page, pageSize);
+            AuthorsViewModel viewModel = new AuthorsViewModel
+            {
+                PageViewModel = pageViewModel,
+                authors = items
+            };
+            return Ok(viewModel);
         }
 
         // GET: api/Authors/5
@@ -107,17 +131,6 @@ namespace BooksWebAPI.Controllers
             {
                 return Ok();
             }
-        }
-
-        [HttpPost("searchBy")]
-        public async Task<ActionResult<IEnumerable<AuthorModel>>> SearchBy([FromBody] AuthorSearchModel authorSearchModel)
-        {
-            var authors = await authorsService.SearchBy(authorSearchModel);
-            if (authors == null)
-            {
-                return NotFound();
-            }
-            return Ok(authors);
         }
     }
 }
