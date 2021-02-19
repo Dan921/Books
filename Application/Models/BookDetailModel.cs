@@ -14,8 +14,6 @@ namespace Application.Models
 
         public string LongDescription { get; set; }
 
-        public byte[] CoverImage { get; set; }
-
         public DateTime? PublishingDate { get; set; }
 
         public float Rating { get; set; }
@@ -26,7 +24,7 @@ namespace Application.Models
 
         public ICollection<BookTagModel> Tags { get; set; }
 
-        public BookStatusModel BookStatus { get; set; }
+        public BookStatus BookStatus { get; set; }
 
         public BookSeriesModel BookSeries { get; set; }
 

@@ -28,14 +28,7 @@ namespace Application.Logic
         public async Task<BookSeries> GetSeriesById(Guid id)
         {
             var series = await seriesRepository.GetById(id);
-            if (series != null)
-            {
-                return series;
-            }
-            else
-            {
-                return null;
-            }
+            return series;
         }
 
         public async Task<bool> InsertSeries(BookSeries series)

@@ -15,5 +15,7 @@ namespace Application.Models
         public string Text { get; set; }
 
         public float Rating { get; set; }
-    }
+
+        public Guid BookId { get; set; }
+}
 }

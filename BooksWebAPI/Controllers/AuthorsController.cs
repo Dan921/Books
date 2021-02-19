@@ -7,9 +7,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Data.Context;
 using Application.Models;
-using AutoMapper;
 using Data.Models;
+using AutoMapper;
 using Application.Interfaces;
+using Application.Logic;
 
 namespace BooksWebAPI.Controllers
 {
@@ -17,11 +18,13 @@ namespace BooksWebAPI.Controllers
     [ApiController]
     public class AuthorsController : ControllerBase
     {
-        private readonly IAuthorsQueriesService authorsService;
+        private IAuthorsQueriesService authorsService;
+        private IMapper mapper;
 
-        public AuthorsController(IAuthorsQueriesService authorsService)
+        public AuthorsController(IAuthorsQueriesService authorsService, IMapper mapper)
         {
-            this.authorsService = authorsService;                                                                                       
+            this.authorsService = authorsService;
+            this.mapper = mapper;
         }
 
         // GET: api/Authors
@@ -51,8 +54,7 @@ namespace BooksWebAPI.Controllers
         {
             try
             {
-                var mapper = new MapperConfiguration(cfg => cfg.CreateMap<AuthorModel, Author>()).CreateMapper();
-                var author = mapper.Map<AuthorModel, Author>(authorModel);
+                var author = mapper.Map<Author>(authorModel);
                 var updatedAuthor = await authorsService.UpdateAuthor(author);
                 if (updatedAuthor == null)
                 {
@@ -75,8 +77,7 @@ namespace BooksWebAPI.Controllers
             {
                 return NotFound();
             }
-            var mapper = new MapperConfiguration(cfg => cfg.CreateMap<AuthorModel, Author>()).CreateMapper();
-            var author = mapper.Map<AuthorModel, Author>(authorModel);
+            var author = mapper.Map<Author>(authorModel);
             var isAuthorCreated = await authorsService.InsertAuthor(author);
             if (isAuthorCreated == false)
             {

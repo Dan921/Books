@@ -9,6 +9,7 @@ using Data.Context;
 using Application.Interfaces;
 using Application.Models;
 using AutoMapper;
+using Application.Logic;
 
 namespace BooksWebAPI.Controllers
 {
@@ -16,11 +17,13 @@ namespace BooksWebAPI.Controllers
     [ApiController]
     public class BookGenresController : ControllerBase
     {
-        private readonly IBookGenresQueriesService bookGenresQueriesService;
+        private IBookGenresQueriesService bookGenresQueriesService;
+        private IMapper mapper;
 
-        public BookGenresController(IBookGenresQueriesService bookGenresQueriesService)
+        public BookGenresController(IBookGenresQueriesService bookGenresQueriesService, IMapper mapper)
         {
             this.bookGenresQueriesService = bookGenresQueriesService;
+            this.mapper = mapper;
         }
 
         // GET: api/BookGenres
@@ -50,8 +53,7 @@ namespace BooksWebAPI.Controllers
         {
             try
             {
-                var mapper = new MapperConfiguration(cfg => cfg.CreateMap<BookGenreModel, BookGenre>()).CreateMapper();
-                var genre = mapper.Map<BookGenreModel, BookGenre>(bookGenreModel);
+                var genre = mapper.Map<BookGenre>(bookGenreModel);
                 var updatedGenre = await bookGenresQueriesService.UpdateGenre(genre);
                 if (updatedGenre == null)
                 {
@@ -74,8 +76,7 @@ namespace BooksWebAPI.Controllers
             {
                 return NotFound();
             }
-            var mapper = new MapperConfiguration(cfg => cfg.CreateMap<BookGenreModel, BookGenre>()).CreateMapper();
-            var genre = mapper.Map<BookGenreModel, BookGenre>(bookGenreModel);
+            var genre = mapper.Map<BookGenre>(bookGenreModel);
             var isGenreCreated = await bookGenresQueriesService.InsertGenre(genre);
             if (isGenreCreated == false)
             {

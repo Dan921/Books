@@ -44,9 +44,9 @@ namespace Data.Repositories
             {
                 authors = authors.Where(a => a.Name.Contains(bookSearchModel.BookName));
             }
-            if (bookSearchModel.AuthorName != null)
+            if (bookSearchModel.AuthorId != null)
             {
-                authors = authors.Where(a => a.Authors.Select(p => p.FullName).Contains(bookSearchModel.AuthorName));
+                authors = authors.Where(a => a.Authors.Select(p => p.Id).Contains(bookSearchModel.AuthorId));
             }
             if (bookSearchModel.SeriesName != null)
             {
@@ -58,11 +58,15 @@ namespace Data.Repositories
             }
             if (bookSearchModel.GanreIds != null)
             {
-                authors = authors.Where(a => a.Genres.Select(p => p.Id).ToArray() == bookSearchModel.GanreIds);
+                authors = authors.Where(a => a.Genres.Select(p => p.Id) == bookSearchModel.GanreIds);
             }
             if (bookSearchModel.TagIds != null)
             {
-                authors = authors.Where(a => a.Tags.Select(p => p.Id).ToArray() == bookSearchModel.TagIds);
+                authors = authors.Where(a => a.Tags.Select(p => p.Id) == bookSearchModel.TagIds);
+            }
+            if (bookSearchModel.Rating != null)
+            {
+                authors = authors.Where(a => a.Rating > bookSearchModel.Rating);
             }
             return Task.FromResult(authors);
         }

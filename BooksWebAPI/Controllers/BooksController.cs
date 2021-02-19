@@ -18,11 +18,13 @@ namespace BooksWebAPI.Controllers
     [ApiController]
     public class BooksController : ControllerBase
     {
-        private readonly IBooksQueriesService bookService;
+        private IBooksQueriesService bookService;
+        private IMapper mapper;
 
-        public BooksController(IBooksQueriesService bookService)
+        public BooksController(IBooksQueriesService bookService, IMapper mapper)
         {
             this.bookService = bookService;
+            this.mapper = mapper;
         }
 
         // GET: api/Books
@@ -56,8 +58,8 @@ namespace BooksWebAPI.Controllers
         {
             try
             {
-                var mapper = new MapperConfiguration(cfg => cfg.CreateMap<BookDetailModel, Book>()).CreateMapper();
-                var book = mapper.Map<BookDetailModel, Book>(bookDetailModel);
+                var book = mapper.Map<Book>(bookDetailModel);
+
                 var updatedBook = await bookService.UpdateBook(book);
                 if (updatedBook == null)
                 {
@@ -80,8 +82,9 @@ namespace BooksWebAPI.Controllers
             {
                 return NotFound();
             }
-            var mapper = new MapperConfiguration(cfg => cfg.CreateMap<BookDetailModel, Book>()).CreateMapper();
-            var book = mapper.Map<BookDetailModel, Book>(bookDetailModel);
+
+            var book = mapper.Map<Book>(bookDetailModel);
+
             var isBookCreated = await bookService.InsertBook(book);
             if (isBookCreated == false)
             {
@@ -170,8 +173,9 @@ namespace BooksWebAPI.Controllers
             {
                 return NotFound();
             }
-            var mapper = new MapperConfiguration(cfg => cfg.CreateMap<BookReviewModel, BookReview>()).CreateMapper();
-            var bookReview = mapper.Map<BookReviewModel, BookReview>(bookReviewModel);
+
+            var bookReview = mapper.Map<BookReview>(bookReviewModel);
+
             var isReviewCreated = await bookService.AddReview(bookId, bookReview);
             if (isReviewCreated == false)
             {

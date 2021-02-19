@@ -26,14 +26,7 @@ namespace Application.Logic
         public async Task<BookTag> GetTagById(Guid id)
         {
             var tag = await tagsRepository.GetById(id);
-            if (tag != null)
-            {
-                return tag;
-            }
-            else
-            {
-                return null;
-            }
+            return null;
         }
 
         public async Task<bool> InsertTag(BookTag tag)

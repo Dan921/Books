@@ -29,14 +29,7 @@ namespace Application.Logic
         public async Task<Author> GetAuthorById(Guid id)
         {
             var author = await authorsRepository.GetById(id);
-            if (author != null)
-            {
-                return author;
-            }
-            else
-            {
-                return null;
-            }
+            return author;
         }
 
         public async Task<bool> InsertAuthor(Author author)

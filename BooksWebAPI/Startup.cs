@@ -47,6 +47,8 @@ namespace BooksWebAPI
             services.AddScoped<IBookGenresQueriesService, BookGenresQueriesService>();
             services.AddScoped<IBookTagsQueriesService, BookTagsQueriesService>();
 
+            services.AddAutoMapper(typeof(AutoMapperProfiles).Assembly);
+
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {

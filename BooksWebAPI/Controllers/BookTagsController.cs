@@ -16,11 +16,13 @@ namespace BooksWebAPI.Controllers
     [ApiController]
     public class BookTagsController : ControllerBase
     {
-        private readonly IBookTagsQueriesService bookTagsQueriesService;
+        private IBookTagsQueriesService bookTagsQueriesService;
+        private IMapper mapper;
 
-        public BookTagsController(IBookTagsQueriesService bookTagsQueriesService)
+        public BookTagsController(IBookTagsQueriesService bookTagsQueriesService, IMapper mapper)
         {
             this.bookTagsQueriesService = bookTagsQueriesService;
+            this.mapper = mapper;
         }
 
         // GET: api/BookTags
@@ -50,8 +52,7 @@ namespace BooksWebAPI.Controllers
         {
             try
             {
-                var mapper = new MapperConfiguration(cfg => cfg.CreateMap<BookTagModel, BookTag>()).CreateMapper();
-                var tag = mapper.Map<BookTagModel, BookTag>(bookTagModel);
+                var tag = mapper.Map<BookTag>(bookTagModel);
                 var updatedTag = await bookTagsQueriesService.UpdateTag(tag);
                 if (updatedTag == null)
                 {
@@ -74,8 +75,7 @@ namespace BooksWebAPI.Controllers
             {
                 return NotFound();
             }
-            var mapper = new MapperConfiguration(cfg => cfg.CreateMap<BookTagModel, BookTag>()).CreateMapper();
-            var tag = mapper.Map<BookTagModel, BookTag>(bookTagModel);
+            var tag = mapper.Map<BookTag>(bookTagModel);
             var isTagCreated = await bookTagsQueriesService.InsertTag(tag);
             if (isTagCreated == false)
             {

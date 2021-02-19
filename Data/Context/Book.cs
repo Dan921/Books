@@ -31,7 +31,7 @@ namespace Data.Context
 
         public ICollection<Author> Authors { get; set; }
 
-        public BookStatusModel BookStatus { get; set; }
+        public BookStatus BookStatus { get; set; }
 
         public BookSeries BookSeries { get; set; }
     }

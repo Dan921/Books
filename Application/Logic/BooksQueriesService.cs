@@ -27,14 +27,7 @@ namespace Application.Logic
         public async Task<Book> GetBookById(Guid id)
         {
             var book = await bookRepository.GetById(id);
-            if (book != null)
-            {
-                return book;
-            }
-            else
-            {
-                return null;
-            }
+            return null;
         }
 
         public async Task<IEnumerable<Book>> GetBooks()

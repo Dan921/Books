@@ -203,7 +203,7 @@ namespace Data.Migrations
                     b.ToTable("BookSeries");
                 });
 
-            modelBuilder.Entity("Data.Context.BookStatusModel", b =>
+            modelBuilder.Entity("Data.Context.BookStatus", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -282,7 +282,7 @@ namespace Data.Migrations
                         .WithMany("Books")
                         .HasForeignKey("BookSeriesId");
 
-                    b.HasOne("Data.Context.BookStatusModel", "BookStatus")
+                    b.HasOne("Data.Context.BookStatus", "BookStatus")
                         .WithMany("Books")
                         .HasForeignKey("BookStatusId");
 
@@ -308,7 +308,7 @@ namespace Data.Migrations
                     b.Navigation("Books");
                 });
 
-            modelBuilder.Entity("Data.Context.BookStatusModel", b =>
+            modelBuilder.Entity("Data.Context.BookStatus", b =>
                 {
                     b.Navigation("Books");
                 });

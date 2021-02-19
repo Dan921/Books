@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
 namespace Data.Context
@@ -15,5 +16,8 @@ namespace Data.Context
         public string Text { get; set; }
 
         public float Rating { get; set; }
+
+        [ForeignKey(nameof(BookId))]
+        public Guid BookId { get; set; }
     }
 }

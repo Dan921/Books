@@ -35,14 +35,7 @@ namespace Application.Logic
         public async Task<BookGenre> GetGenreById(Guid id)
         {
             var genre = await genresRepository.GetById(id);
-            if (genre != null)
-            {
-                return genre;
-            }
-            else
-            {
-                return null;
-            }
+            return genre;
         }
 
         public async Task<IEnumerable<BookGenre>> GetGenres()

@@ -16,11 +16,13 @@ namespace BooksWebAPI.Controllers
     [ApiController]
     public class BookSeriesController : ControllerBase
     {
-        private readonly IBookSeriesQueriesService seriesService;
+        private IBookSeriesQueriesService seriesService;
+        private IMapper mapper;
 
-        public BookSeriesController(IBookSeriesQueriesService seriesService)
+        public BookSeriesController(IBookSeriesQueriesService seriesService, IMapper mapper)
         {
             this.seriesService = seriesService;
+            this.mapper = mapper;
         }
 
         // GET: api/BookSeries
@@ -50,8 +52,7 @@ namespace BooksWebAPI.Controllers
         {
             try
             {
-                var mapper = new MapperConfiguration(cfg => cfg.CreateMap<BookSeriesModel, BookSeries>()).CreateMapper();
-                var bookSeries = mapper.Map<BookSeriesModel, BookSeries> (bookSeriesModel);
+                var bookSeries = mapper.Map<BookSeries>(bookSeriesModel);
                 var updatedSeries = await seriesService.UpdateSeries(bookSeries);
                 if (updatedSeries == null)
                 {
@@ -74,8 +75,7 @@ namespace BooksWebAPI.Controllers
             {
                 return NotFound();
             }
-            var mapper = new MapperConfiguration(cfg => cfg.CreateMap<BookSeriesModel, BookSeries>()).CreateMapper();
-            var bookSeries = mapper.Map<BookSeriesModel, BookSeries>(bookSeriesModel);
+            var bookSeries = mapper.Map<BookSeries>(bookSeriesModel);
             var isSeriesCreated = await seriesService.InsertSeries(bookSeries);
             if (isSeriesCreated == false)
             {
