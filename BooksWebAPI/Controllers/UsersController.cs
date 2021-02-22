@@ -8,25 +8,25 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace BooksWeb.Controllers
+namespace BooksWebApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
     public class UsersController : ControllerBase
     {
-        UserManager<User> _userManager;
+        UserManager<ApplicationUser> _userManager;
 
-        public UsersController(UserManager<User> userManager)
+        public UsersController(UserManager<ApplicationUser> userManager)
         {
             _userManager = userManager;
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Create(CreateUserViewModel model)
+        [HttpPost("Create")]
+        public async Task<IActionResult> Create([FromBody] CreateUserViewModel model)
         {
             if (ModelState.IsValid)
             {
-                User user = new User { Email = model.Email, UserName = model.Email, FIO = model.FIO };
+                ApplicationUser user = new ApplicationUser { Email = model.Email, UserName = model.Email, FIO = model.FIO };
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
@@ -36,12 +36,12 @@ namespace BooksWeb.Controllers
             return BadRequest();
         }
 
-        [HttpPut("{id}")]
-        public async Task<IActionResult> Edit(string id, EditUserViewModel model)
+        [HttpPut("Edit/{id}")]
+        public async Task<IActionResult> Edit(string id, [FromBody] EditUserViewModel model)
         {
             if (ModelState.IsValid)
             {
-                User user = await _userManager.FindByIdAsync(id);
+                ApplicationUser user = await _userManager.FindByIdAsync(id);
                 if (user != null)
                 {
                     user.Email = model.Email;
@@ -58,16 +58,43 @@ namespace BooksWeb.Controllers
             return Ok();
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete("Delete/{id}")]
         public async Task<ActionResult> Delete(string id)
         {
-            User user = await _userManager.FindByIdAsync(id);
+            ApplicationUser user = await _userManager.FindByIdAsync(id);
             if (user != null)
             {
                 await _userManager.DeleteAsync(user);
                 return Ok();
             }
             return NotFound();
+        }
+
+        [HttpPost("ChangePassword")]
+        public async Task<IActionResult> ChangePassword(ChangePasswordViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                ApplicationUser user = await _userManager.FindByIdAsync(model.Id.ToString());
+                if (user != null)
+                {
+                    IdentityResult result =
+                        await _userManager.ChangePasswordAsync(user, model.OldPassword, model.NewPassword);
+                    if (result.Succeeded)
+                    {
+                        return RedirectToAction("Index");
+                    }
+                    else
+                    {
+                        return BadRequest();
+                    }
+                }
+                else
+                {
+                    return NotFound();
+                }
+            }
+            return Ok(model);
         }
     }
 }

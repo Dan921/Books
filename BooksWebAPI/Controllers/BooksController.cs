@@ -13,7 +13,7 @@ using Data.Models;
 using Application.Interfaces;
 using Application.ViewModels;
 
-namespace BooksWeb.Controllers
+namespace BooksWebApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -30,7 +30,6 @@ namespace BooksWeb.Controllers
 
         // GET: api/Books
         [HttpGet]
-        [HttpPost]
         public async Task<ActionResult<BooksViewModel>> GetBooks([FromBody] BookSearchModel bookSearchModel, int page = 1)
         {
             int pageSize = 10;
@@ -162,7 +161,7 @@ namespace BooksWeb.Controllers
         public async Task<IActionResult> GetBookCover(Guid id)
         {
             var cover = await bookService.GetBookCover(id);
-            if(cover == null)
+            if (cover == null)
             {
                 return NotFound();
             }
@@ -206,28 +205,6 @@ namespace BooksWeb.Controllers
             {
                 return Ok(bookReviewModel);
             }
-        }
-
-        [HttpGet("TopRated")]
-        public async Task<IActionResult> GetTopRated()
-        {
-            var books = await bookService.GetTopRated();
-            if (books == null)
-            {
-                return NotFound();
-            }
-            return Ok(books.ToList());
-        }
-
-        [HttpGet("TopByPopularity")]
-        public async Task<IActionResult> GetTopByPopularity()
-        {
-            var books = await bookService.GetTopByNumberOfRatings();
-            if (books == null)
-            {
-                return NotFound();
-            }
-            return Ok(books.ToList());
         }
     }
 }

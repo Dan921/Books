@@ -6,7 +6,7 @@ using System.Text;
 
 namespace Data.Context
 {
-    public class LibraryContext : IdentityDbContext<User>
+    public class LibraryContext : IdentityDbContext<ApplicationUser, ApplicationRole, Guid>
     {
         public LibraryContext(DbContextOptions options) : base(options)
         {

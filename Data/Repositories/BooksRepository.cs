@@ -25,19 +25,7 @@ namespace Data.Repositories
             await context.SaveChangesAsync();
         }
 
-        public Task<IOrderedQueryable<Book>> GetTopRated()
-        {
-            var books = context.Books.OrderBy(p => p.Rating);
-            return Task.FromResult(books);
-        }
-
-        public Task<IOrderedQueryable<Book>> GetTopByNumberOfRatings()
-        {
-            var books = context.Books.OrderBy(p => p.NumberOfRatings);
-            return Task.FromResult(books);
-        }
-
-        public Task<IEnumerable<Book>> SearchBy(BookSearchModel bookSearchModel)
+        public Task<List<Book>> SearchBy(BookSearchModel bookSearchModel)
         {
             IEnumerable<Book> authors = context.Books;
             if (bookSearchModel.BookName != null)
@@ -68,7 +56,15 @@ namespace Data.Repositories
             {
                 authors = authors.Where(a => a.Rating > bookSearchModel.Rating);
             }
-            return Task.FromResult(authors);
+            if (bookSearchModel.TopRated == true)
+            {
+                authors = authors.OrderBy(p => p.Rating);
+            }
+            if (bookSearchModel.TopByPopularity == true)
+            {
+                authors = authors.OrderBy(p => p.NumberOfRatings);
+            }
+            return Task.FromResult(authors.ToList());
         }
     }
 }

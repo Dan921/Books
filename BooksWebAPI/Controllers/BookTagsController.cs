@@ -10,7 +10,7 @@ using Application.Interfaces;
 using Application.Models;
 using AutoMapper;
 
-namespace BooksWeb.Controllers
+namespace BooksWebApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]

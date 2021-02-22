@@ -19,7 +19,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace BooksWeb
+namespace BooksWebApi
 {
     public class Startup
     {
@@ -50,7 +50,7 @@ namespace BooksWeb
 
             services.AddAutoMapper(typeof(AutoMapperProfiles).Assembly);
 
-            services.AddIdentity<User, Role>()
+            services.AddIdentity<ApplicationUser, ApplicationRole>()
                 .AddEntityFrameworkStores<LibraryContext>();
 
             services.AddControllersWithViews();
@@ -59,7 +59,7 @@ namespace BooksWeb
 
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "BooksWeb", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "BooksWebApi", Version = "v1" });
             });
         }
 
@@ -70,7 +70,7 @@ namespace BooksWeb
             {
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "BooksWeb v1"));
+                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "BooksWebApi v1"));
             }
 
             app.UseHttpsRedirection();

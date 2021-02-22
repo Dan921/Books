@@ -30,10 +30,10 @@ namespace Application.Logic
             return null;
         }
 
-        public async Task<IEnumerable<Book>> GetBooks()
+        public async Task<List<Book>> GetBooks()
         {
             var books = await bookRepository.GetAll();
-            return books;
+            return books.ToList();
         }
 
         public async Task<bool> InsertBook(Book book)
@@ -158,21 +158,9 @@ namespace Application.Logic
             }
         }
 
-        public async Task<IEnumerable<Book>> SearchBy(BookSearchModel bookSearchModel)
+        public async Task<List<Book>> SearchBy(BookSearchModel bookSearchModel)
         {
             var authors = await bookRepository.SearchBy(bookSearchModel);
-            return authors;
-        }
-
-        public async Task<IEnumerable<Book>> GetTopRated()
-        {
-            var authors = await bookRepository.GetTopRated();
-            return authors;
-        }
-
-        public async Task<IEnumerable<Book>> GetTopByNumberOfRatings()
-        {
-            var authors = await bookRepository.GetTopByNumberOfRatings();
             return authors;
         }
     }

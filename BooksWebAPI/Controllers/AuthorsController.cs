@@ -13,7 +13,7 @@ using Application.Interfaces;
 using Application.Logic;
 using Application.ViewModels;
 
-namespace BooksWeb.Controllers
+namespace BooksWebApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -29,14 +29,14 @@ namespace BooksWeb.Controllers
         }
 
         // GET: api/Authors
-        [HttpPost]
-        public async Task<ActionResult<AuthorsViewModel>> GetAuthors([FromBody] AuthorSearchModel authorSearchModel, int page = 1)
+        [HttpPost("List")]
+        public async Task<ActionResult<AuthorsViewModel>> GetAuthorsOnPages([FromBody] AuthorSearchModel authorSearchModel, int page = 1)
         {
             int pageSize = 10;
             IQueryable<AuthorModel> authors;
             if (authorSearchModel != null)
             {
-                authors = mapper.Map<IQueryable<AuthorModel>>( await authorsService.SearchBy(authorSearchModel));
+                authors = mapper.Map<IQueryable<AuthorModel>>(await authorsService.SearchBy(authorSearchModel));
                 if (authors == null)
                 {
                     return NotFound();
@@ -57,6 +57,13 @@ namespace BooksWeb.Controllers
                 authors = items
             };
             return Ok(viewModel);
+        }
+
+        [HttpGet("List")]
+        public async Task<IActionResult> GetAllAuthors()
+        {
+            var authors = mapper.Map<List<AuthorModel>>(await authorsService.GetAuthors());
+            return Ok(authors);
         }
 
         // GET: api/Authors/5

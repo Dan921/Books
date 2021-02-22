@@ -5,7 +5,8 @@ using System.Text;
 
 namespace Data.Context
 {
-    public class Role : IdentityRole<Guid>
+    public class ApplicationUser : IdentityUser<Guid>
     {
+        public string FIO { get; set; }
     }
 }

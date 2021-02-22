@@ -13,5 +13,7 @@ namespace Data.Models
         public Guid[] GanreIds { get; set; }
         public Guid[] TagIds { get; set; }
         public float? Rating { get; set; }
+        public bool TopRated { get; set; }
+        public bool TopByPopularity { get; set; }
     }
 }
