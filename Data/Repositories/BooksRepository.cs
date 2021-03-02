@@ -25,46 +25,50 @@ namespace Data.Repositories
             await context.SaveChangesAsync();
         }
 
-        public Task<List<Book>> SearchBy(BookSearchModel bookSearchModel)
+        public Task<IEnumerable<Book>> GetBooksUsingFilter(BookFilterModel bookFilterModel)
         {
             IEnumerable<Book> authors = context.Books;
-            if (bookSearchModel.BookName != null)
+            if (bookFilterModel.BookName != null)
             {
-                authors = authors.Where(a => a.Name.Contains(bookSearchModel.BookName));
+                authors = authors.Where(a => a.Name.Contains(bookFilterModel.BookName));
             }
-            if (bookSearchModel.AuthorId != null)
+            if (bookFilterModel.AuthorId != null)
             {
-                authors = authors.Where(a => a.Authors.Select(p => p.Id).Contains(bookSearchModel.AuthorId));
+                authors = authors.Where(a => a.Authors.Select(p => p.Id).Contains(bookFilterModel.AuthorId));
             }
-            if (bookSearchModel.SeriesName != null)
+            if (bookFilterModel.SeriesName != null)
             {
-                authors = authors.Where(a => a.BookSeries.Name.Contains(bookSearchModel.SeriesName));
+                authors = authors.Where(a => a.BookSeries.Name.Contains(bookFilterModel.SeriesName));
             }
-            if (bookSearchModel.Year != null)
+            if (bookFilterModel.Year != null)
             {
-                authors = authors.Where(a => a.PublishingDate.Year == bookSearchModel.Year);
+                authors = authors.Where(a => a.PublishingDate.Year == bookFilterModel.Year);
             }
-            if (bookSearchModel.GanreIds != null)
+            if (bookFilterModel.GanreIds != null)
             {
-                authors = authors.Where(a => a.Genres.Select(p => p.Id) == bookSearchModel.GanreIds);
+                authors = authors.Where(a => a.Genres.Select(p => p.Id) == bookFilterModel.GanreIds);
             }
-            if (bookSearchModel.TagIds != null)
+            if (bookFilterModel.TagIds != null)
             {
-                authors = authors.Where(a => a.Tags.Select(p => p.Id) == bookSearchModel.TagIds);
+                authors = authors.Where(a => a.Tags.Select(p => p.Id) == bookFilterModel.TagIds);
             }
-            if (bookSearchModel.Rating != null)
+            if (bookFilterModel.Rating != null)
             {
-                authors = authors.Where(a => a.Rating > bookSearchModel.Rating);
+                authors = authors.Where(a => a.Rating > bookFilterModel.Rating);
             }
-            if (bookSearchModel.TopRated == true)
+            if(bookFilterModel.StatusIds != null)
+            {
+                authors = authors.Where(a => bookFilterModel.StatusIds.Contains(a.BookStatus.Id));
+            }
+            if (bookFilterModel.TopRated == true)
             {
                 authors = authors.OrderBy(p => p.Rating);
             }
-            if (bookSearchModel.TopByPopularity == true)
+            if (bookFilterModel.TopByPopularity == true)
             {
                 authors = authors.OrderBy(p => p.NumberOfRatings);
             }
-            return Task.FromResult(authors.ToList());
+            return Task.FromResult(authors);
         }
     }
 }

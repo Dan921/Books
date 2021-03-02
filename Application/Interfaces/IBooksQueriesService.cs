@@ -11,7 +11,7 @@ namespace Application.Interfaces
 {
     public interface IBooksQueriesService
     {
-        Task<List<Book>> GetBooks();
+        Task<IEnumerable<Book>> GetBooks(BookFilterModel bookSearchModel, IList<string> roles);
         Task<Book> GetBookById(Guid id);
         Task<bool> InsertBook(Book book);
         Task<Book> UpdateBook(Book book);
@@ -20,7 +20,6 @@ namespace Application.Interfaces
         Task<byte[]> GetBookCover(Guid id);
         Task<bool> DeleteBookCover(Guid Id);
         Task<bool> IsBookCoverExist(Guid Id);
-        Task<List<Book>> SearchBy(BookSearchModel bookSearchModel);
         Task<bool> AddReview(Guid bookId, BookReview review);
     }
 }

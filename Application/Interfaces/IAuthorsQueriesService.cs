@@ -15,6 +15,6 @@ namespace Application.Interfaces
         Task<bool> InsertAuthor(Author author);
         Task<Author> UpdateAuthor(Author author);
         Task<bool> DeleteAuthor(Guid Id);
-        Task<IEnumerable<Author>> SearchBy(AuthorSearchModel authorSearchModel);
+        Task<IEnumerable<Author>> SearchBy(AuthorFilterModel authorSearchModel);
     }
 }

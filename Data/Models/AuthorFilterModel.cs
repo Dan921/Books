@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Data.Models
 {
-    public class AuthorSearchModel
+    public class AuthorFilterModel
     {
         public string Name { get; set; }
         public DateTime? BirthDate { get; set; }

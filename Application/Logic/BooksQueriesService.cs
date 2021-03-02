@@ -30,10 +30,25 @@ namespace Application.Logic
             return null;
         }
 
-        public async Task<List<Book>> GetBooks()
+        public async Task<IEnumerable<Book>> GetBooks(BookFilterModel bookSearchModel, IList<string> roles)
         {
-            var books = await bookRepository.GetAll();
-            return books.ToList();
+            var books = await bookRepository.GetBooksUsingFilter(bookSearchModel);
+
+            var StatusesAvailableChecker = new List<string>() { "на рассмотрении", "опубликованно", "снято с публикации" };
+
+            if (!(roles.Contains("Администратор") || roles.Contains("Писатель")))
+            {
+                if (roles.Contains("Проверяющий"))
+                {
+                    books = books.Where(p => StatusesAvailableChecker.Contains(p.BookStatus.Name));
+                }
+                else
+                {
+                    books = books.Where(p => p.BookStatus.Name == "опубликованно");
+                }
+            }
+
+            return books;
         }
 
         public async Task<bool> InsertBook(Book book)
@@ -156,12 +171,6 @@ namespace Application.Logic
             {
                 return false;
             }
-        }
-
-        public async Task<List<Book>> SearchBy(BookSearchModel bookSearchModel)
-        {
-            var authors = await bookRepository.SearchBy(bookSearchModel);
-            return authors;
         }
     }
 }

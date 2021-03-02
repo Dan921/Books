@@ -50,7 +50,7 @@ namespace BooksWebApi
 
             services.AddAutoMapper(typeof(AutoMapperProfiles).Assembly);
 
-            services.AddIdentity<ApplicationUser, ApplicationRole>()
+            services.AddIdentity<AppUser, AppRole>()
                 .AddEntityFrameworkStores<LibraryContext>();
 
             services.AddControllersWithViews();

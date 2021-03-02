@@ -11,6 +11,6 @@ namespace Data.Interfaces
     public interface IBooksRepository : IGenericRepository<Book>
     {
         Task AddReview(Guid bookId, BookReview review);
-        Task<List<Book>> SearchBy(BookSearchModel bookSearchModel);
+        Task<IEnumerable<Book>> GetBooksUsingFilter(BookFilterModel bookFilterModel);
     }
 }

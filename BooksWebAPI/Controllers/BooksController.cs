@@ -12,51 +12,67 @@ using AutoMapper;
 using Data.Models;
 using Application.Interfaces;
 using Application.ViewModels;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 
 namespace BooksWebApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class BooksController : ControllerBase
     {
+        UserManager<IdentityUser> userManager;
         private IBooksQueriesService bookService;
         private IMapper mapper;
 
-        public BooksController(IBooksQueriesService bookService, IMapper mapper)
+        public BooksController(UserManager<IdentityUser> manager, IBooksQueriesService bookService, IMapper mapper)
         {
+            this.userManager = manager;
             this.bookService = bookService;
             this.mapper = mapper;
         }
 
-        // GET: api/Books
-        [HttpGet]
-        public async Task<ActionResult<BooksViewModel>> GetBooks([FromBody] BookSearchModel bookSearchModel, int page = 1)
+        // POST: api/Books/List/1
+        [HttpPost("List/{page}")]
+        [AllowAnonymous]
+        public async Task<ActionResult<BooksViewModel>> GetBooksPage([FromBody] BookFilterModel bookSearchModel, [FromQuery] int page = 1)
         {
             int pageSize = 10;
-            IQueryable<BookShortModel> books;
-            if (bookSearchModel != null)
+            var books = await bookService.GetBooks(bookSearchModel, await userManager.GetRolesAsync(await userManager.GetUserAsync(User)));
+            if (books == null)
             {
-                books = mapper.Map<IQueryable<BookShortModel>>(await bookService.SearchBy(bookSearchModel));
-                if (books == null)
-                {
-                    return NotFound();
-                }
-            }
-            else
-            {
-                books = mapper.Map<IQueryable<BookShortModel>>(await bookService.GetBooks());
+                return null;
             }
 
-            var count = await books.CountAsync();
-            var items = await books.Skip((page - 1) * pageSize).Take(pageSize).ToListAsync();
+            var count = books.Count();
+            var items = books.Skip((page - 1) * pageSize).Take(pageSize);
 
             PageViewModel pageViewModel = new PageViewModel(count, page, pageSize);
+
             BooksViewModel viewModel = new BooksViewModel
             {
                 PageViewModel = pageViewModel,
-                books = items
+                books = mapper.Map<List<BookShortModel>>(items)
             };
+
             return Ok(viewModel);
+        }
+
+        // GET: api/Books
+        [HttpGet]
+        [AllowAnonymous]
+        public async Task<ActionResult<BooksViewModel>> GetBooks()
+        {
+            var books = await bookService.GetBooks(null, await userManager.GetRolesAsync(await userManager.GetUserAsync(User)));
+            if (books == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                return Ok(books);
+            }
         }
 
         // GET: api/Books/5
@@ -74,28 +90,51 @@ namespace BooksWebApi.Controllers
         // PUT: api/Books
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut]
+        [Authorize(Roles = "Администратор, Писатель, Проверяющий")]
         public async Task<IActionResult> PutBook(BookDetailModel bookDetailModel)
         {
-            try
+            var statusesIds = new Dictionary<string, Guid>()
             {
-                var book = mapper.Map<Book>(bookDetailModel);
+                {"черновик", Guid("3c6d0e4b-b29f-40a3-ae24-cfc2d0bfec34")},
+                {"на рассмотрении", Guid("95e1c858-9659-45f5-8230-0d4b655ab827")},
+                {"опубликовано", Guid("8736898c-fe55-4f70-9b88-52c2e5f31be2")},
+                {"снято с публикации", Guid("faea15d1-b917-44cf-b18c-b021380af2b9")}
+            };
 
-                var updatedBook = await bookService.UpdateBook(book);
-                if (updatedBook == null)
-                {
-                    return NotFound();
-                }
-                return Ok(book);
-            }
-            catch
+            if ((User.IsInRole("Писатель") && (bookDetailModel.BookStatusId == statusesIds["черновик"] || bookDetailModel.BookStatusId == statusesIds["на рассмотрении"])) ||
+                (User.IsInRole("Проверяющий") && (bookDetailModel.BookStatusId == statusesIds["на рассмотрении"] || bookDetailModel.BookStatusId == statusesIds["опубликовано"] || bookDetailModel.BookStatusId == statusesIds["снято с публикации"])))
             {
-                throw;
+                try
+                {
+                    var book = mapper.Map<Book>(bookDetailModel);
+
+                    var updatedBook = await bookService.UpdateBook(book);
+                    if (updatedBook == null)
+                    {
+                        return NotFound();
+                    }
+                    return Ok(book);
+                }
+                catch
+                {
+                    throw;
+                }
             }
+            else
+            {
+                return Forbid();
+            }
+        }
+
+        private Guid Guid(string v)
+        {
+            throw new NotImplementedException();
         }
 
         // POST: api/Books
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
+        [Authorize(Roles = "Администратор")]
         public async Task<IActionResult> PostBook(BookDetailModel bookDetailModel)
         {
             if (bookDetailModel == null)
@@ -118,6 +157,7 @@ namespace BooksWebApi.Controllers
 
         // DELETE: api/Books/5
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Администратор")]
         public async Task<IActionResult> DeleteBook(Guid id)
         {
             var book = await bookService.GetBookById(id);
@@ -137,6 +177,7 @@ namespace BooksWebApi.Controllers
         }
 
         [HttpPut("{id}/upload_cover")]
+        [Authorize(Roles = "Администратор, Писатель, Проверяющий")]
         public async Task<IActionResult> UpdateBookCover(Guid id, IFormFile file)
         {
             try
@@ -158,6 +199,7 @@ namespace BooksWebApi.Controllers
         }
 
         [HttpGet("{id}/cover")]
+        [AllowAnonymous]
         public async Task<IActionResult> GetBookCover(Guid id)
         {
             var cover = await bookService.GetBookCover(id);
@@ -172,6 +214,7 @@ namespace BooksWebApi.Controllers
         }
 
         [HttpDelete("{id}/cover")]
+        [Authorize(Roles = "Администратор")]
         public async Task<IActionResult> DeleteBookCover(Guid Id)
         {
             if (bookService.IsBookCoverExist(Id).Result)
@@ -187,12 +230,20 @@ namespace BooksWebApi.Controllers
         }
 
         [HttpPost("AddReview")]
+        [AllowAnonymous]
         public async Task<IActionResult> AddReview(Guid bookId, BookReviewModel bookReviewModel)
         {
             if (bookReviewModel == null)
             {
                 return NotFound();
             }
+
+            if (User.Identity.IsAuthenticated)
+            {
+                bookReviewModel.UserName = (await userManager.GetUserAsync(User)).UserName;
+            }
+
+            bookReviewModel.Time = DateTime.Now;
 
             var bookReview = mapper.Map<BookReview>(bookReviewModel);
 
@@ -203,7 +254,7 @@ namespace BooksWebApi.Controllers
             }
             else
             {
-                return Ok(bookReviewModel);
+                return Ok();
             }
         }
     }

@@ -1,5 +1,6 @@
 ﻿using Application.ViewModels;
 using Data.Context;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -14,11 +15,11 @@ namespace BooksWebApi.Controllers
     [ApiController]
     public class UsersController : ControllerBase
     {
-        UserManager<ApplicationUser> _userManager;
+        UserManager<AppUser> userManager;
 
-        public UsersController(UserManager<ApplicationUser> userManager)
+        public UsersController(UserManager<AppUser> userManager)
         {
-            _userManager = userManager;
+            this.userManager = userManager;
         }
 
         [HttpPost("Create")]
@@ -26,8 +27,8 @@ namespace BooksWebApi.Controllers
         {
             if (ModelState.IsValid)
             {
-                ApplicationUser user = new ApplicationUser { Email = model.Email, UserName = model.Email, FIO = model.FIO };
-                var result = await _userManager.CreateAsync(user, model.Password);
+                AppUser user = new AppUser { Email = model.Email, UserName = model.Email};
+                var result = await userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
                     return Ok();
@@ -41,14 +42,13 @@ namespace BooksWebApi.Controllers
         {
             if (ModelState.IsValid)
             {
-                ApplicationUser user = await _userManager.FindByIdAsync(id);
+                AppUser user = await userManager.FindByIdAsync(id);
                 if (user != null)
                 {
                     user.Email = model.Email;
                     user.UserName = model.Email;
-                    user.FIO = model.FIO;
 
-                    var result = await _userManager.UpdateAsync(user);
+                    var result = await userManager.UpdateAsync(user);
                     if (result.Succeeded)
                     {
                         return Ok();
@@ -61,10 +61,10 @@ namespace BooksWebApi.Controllers
         [HttpDelete("Delete/{id}")]
         public async Task<ActionResult> Delete(string id)
         {
-            ApplicationUser user = await _userManager.FindByIdAsync(id);
+            AppUser user = await userManager.FindByIdAsync(id);
             if (user != null)
             {
-                await _userManager.DeleteAsync(user);
+                await userManager.DeleteAsync(user);
                 return Ok();
             }
             return NotFound();
@@ -75,14 +75,14 @@ namespace BooksWebApi.Controllers
         {
             if (ModelState.IsValid)
             {
-                ApplicationUser user = await _userManager.FindByIdAsync(model.Id.ToString());
+                AppUser user = await userManager.FindByIdAsync(model.Id.ToString());
                 if (user != null)
                 {
                     IdentityResult result =
-                        await _userManager.ChangePasswordAsync(user, model.OldPassword, model.NewPassword);
+                        await userManager.ChangePasswordAsync(user, model.OldPassword, model.NewPassword);
                     if (result.Succeeded)
                     {
-                        return RedirectToAction("Index");
+                        return Ok();
                     }
                     else
                     {

@@ -12,11 +12,13 @@ using AutoMapper;
 using Application.Interfaces;
 using Application.Logic;
 using Application.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BooksWebApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles = "Администратор")]
     public class AuthorsController : ControllerBase
     {
         private IAuthorsQueriesService authorsService;
@@ -30,7 +32,7 @@ namespace BooksWebApi.Controllers
 
         // GET: api/Authors
         [HttpPost("List")]
-        public async Task<ActionResult<AuthorsViewModel>> GetAuthorsOnPages([FromBody] AuthorSearchModel authorSearchModel, int page = 1)
+        public async Task<ActionResult<AuthorsViewModel>> GetAuthorsOnPages([FromBody] AuthorFilterModel authorSearchModel, int page = 1)
         {
             int pageSize = 10;
             IQueryable<AuthorModel> authors;

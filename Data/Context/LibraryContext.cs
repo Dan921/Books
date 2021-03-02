@@ -6,7 +6,7 @@ using System.Text;
 
 namespace Data.Context
 {
-    public class LibraryContext : IdentityDbContext<ApplicationUser, ApplicationRole, Guid>
+    public class LibraryContext : IdentityDbContext<AppUser, AppRole, Guid>
     {
         public LibraryContext(DbContextOptions options) : base(options)
         {
@@ -20,5 +20,6 @@ namespace Data.Context
         public DbSet<BookTag> BookTags { get; set; }
         public DbSet<BookReview> BookReviews { get; set; }
         public DbSet<BookCover> BookCovers { get; set; }
+
     }
 }

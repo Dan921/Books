@@ -9,11 +9,13 @@ using Data.Context;
 using Application.Interfaces;
 using Application.Models;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BooksWebApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles = "Администратор")]
     public class BookTagsController : ControllerBase
     {
         private IBookTagsQueriesService bookTagsQueriesService;

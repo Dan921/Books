@@ -17,7 +17,7 @@ namespace Data.Repositories
             this.context = context;
         }
 
-        public Task<IEnumerable<Author>> SearchBy(AuthorSearchModel authorSearchModel)
+        public Task<IEnumerable<Author>> SearchBy(AuthorFilterModel authorSearchModel)
         {
             IEnumerable<Author> authors = context.Authors;
             if (authorSearchModel.Name != null)

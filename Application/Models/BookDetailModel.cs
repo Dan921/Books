@@ -14,20 +14,20 @@ namespace Application.Models
 
         public string LongDescription { get; set; }
 
-        public DateTime? PublishingDate { get; set; }
+        public DateTime PublishingDate { get; set; }
 
         public float Rating { get; set; }
 
         public int NumberOfRatings { get; set; }
 
-        public ICollection<BookGenreModel> Genres { get; set; }
+        public List<Guid> GenresIds { get; set; }
 
-        public ICollection<BookTagModel> Tags { get; set; }
+        public List<Guid> TagsIds { get; set; }
 
-        public BookStatus BookStatus { get; set; }
+        public Guid BookStatusId { get; set; }
 
-        public BookSeriesModel BookSeries { get; set; }
+        public Guid BookSeriesId { get; set; }
 
-        public AuthorModel Author { get; set; }
+        public Guid AuthorId { get; set; }
     }
 }

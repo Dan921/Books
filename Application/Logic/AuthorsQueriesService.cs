@@ -74,7 +74,7 @@ namespace Application.Logic
             }
         }
 
-        public async Task<IEnumerable<Author>> SearchBy(AuthorSearchModel authorSearchModel)
+        public async Task<IEnumerable<Author>> SearchBy(AuthorFilterModel authorSearchModel)
         {
             var authors = await authorsRepository.SearchBy(authorSearchModel);
             return authors;

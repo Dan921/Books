@@ -5,7 +5,11 @@ using System.Text;
 
 namespace Data.Context
 {
-    public class ApplicationRole : IdentityRole<Guid>
+    public class AppRole : IdentityRole<Guid>
     {
+        public AppRole(string name)
+        {
+            this.Name = name;
+        }
     }
 }

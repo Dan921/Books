@@ -14,10 +14,10 @@ namespace BooksWebApi.Controllers
     [ApiController]
     public class AccountController : ControllerBase
     {
-        private readonly UserManager<ApplicationUser> _userManager;
-        private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly UserManager<AppUser> _userManager;
+        private readonly SignInManager<AppUser> _signInManager;
 
-        public AccountController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager)
+        public AccountController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -28,7 +28,7 @@ namespace BooksWebApi.Controllers
         {
             if (ModelState.IsValid)
             {
-                ApplicationUser user = new ApplicationUser { Email = model.Email, UserName = model.Email, FIO = model.FIO };
+                AppUser user = new AppUser { Email = model.Email, UserName = model.Email};
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
@@ -36,7 +36,7 @@ namespace BooksWebApi.Controllers
                     return Ok();
                 }
             }
-            return Ok(model);
+            return Ok();
         }
 
         [HttpPost("Login")]
@@ -55,7 +55,7 @@ namespace BooksWebApi.Controllers
                     }
                     else
                     {
-                        Ok(model.Email);
+                        Ok();
                     }
                 }
                 else
@@ -63,7 +63,7 @@ namespace BooksWebApi.Controllers
                     BadRequest();
                 }
             }
-            return Ok(model);
+            return Ok();
         }
 
         [HttpPost("Logout")]
