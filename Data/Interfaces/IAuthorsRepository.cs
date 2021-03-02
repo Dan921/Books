@@ -9,6 +9,6 @@ namespace Data.Interfaces
 {
     public interface IAuthorsRepository : IGenericRepository<Author>
     {
-        Task<IEnumerable<Author>> SearchBy(AuthorFilterModel authorSearchModel);
+        Task<IEnumerable<Author>> GetAuthorsUsingFilter(AuthorFilterModel authorSearchModel);
     }
 }

@@ -17,7 +17,6 @@ namespace Data.Context
 
         public float Rating { get; set; }
 
-        [ForeignKey(nameof(BookId))]
-        public Guid BookId { get; set; }
+        public Book Book { get; set; }
     }
 }

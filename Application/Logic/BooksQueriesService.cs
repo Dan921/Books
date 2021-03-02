@@ -172,5 +172,11 @@ namespace Application.Logic
                 return false;
             }
         }
+
+        public async Task<IEnumerable<BookReview>> GetReviewsByBookId(Guid bookId)
+        {
+            var reviews = await bookRepository.GetReviewsByBookId(bookId);
+            return reviews;
+        }
     }
 }

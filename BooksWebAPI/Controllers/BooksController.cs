@@ -34,7 +34,7 @@ namespace BooksWebApi.Controllers
         }
 
         // POST: api/Books/List/1
-        [HttpPost("List/{page}")]
+        [HttpPost("Page/{page}")]
         [AllowAnonymous]
         public async Task<ActionResult<BooksViewModel>> GetBooksPage([FromBody] BookFilterModel bookSearchModel, [FromQuery] int page = 1)
         {
@@ -62,7 +62,7 @@ namespace BooksWebApi.Controllers
         // GET: api/Books
         [HttpGet]
         [AllowAnonymous]
-        public async Task<ActionResult<BooksViewModel>> GetBooks()
+        public async Task<ActionResult<BooksViewModel>> GetAllBooks()
         {
             var books = await bookService.GetBooks(null, await userManager.GetRolesAsync(await userManager.GetUserAsync(User)));
             if (books == null)
@@ -256,6 +256,13 @@ namespace BooksWebApi.Controllers
             {
                 return Ok();
             }
+        }
+
+        [HttpGet("{id}/Reviews")]
+        public async Task<ActionResult<BookReviewModel>> GetReviews([FromQuery] Guid bookId)
+        {
+            var reviews = await bookService.GetReviewsByBookId(bookId);
+            return Ok(reviews);
         }
     }
 }

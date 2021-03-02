@@ -17,24 +17,27 @@ namespace Data.Repositories
             this.context = context;
         }
 
-        public Task<IEnumerable<Author>> SearchBy(AuthorFilterModel authorSearchModel)
+        public Task<IEnumerable<Author>> GetAuthorsUsingFilter(AuthorFilterModel authorFilterModel)
         {
             IEnumerable<Author> authors = context.Authors;
-            if (authorSearchModel.Name != null)
+            if(authorFilterModel != null)
             {
-                authors = authors.Where(a => a.FullName.Contains(authorSearchModel.Name));
-            }
-            if (authorSearchModel.BirthDate != null && authorSearchModel.DeathDate != null)
-            {
-                authors = authors.Where(a => a.BirthDate > authorSearchModel.BirthDate && a.DeathDate < authorSearchModel.DeathDate);
-            }
-            else if (authorSearchModel.BirthDate != null && authorSearchModel.DeathDate == null)
-            {
-                authors = authors.Where(a => a.BirthDate > authorSearchModel.BirthDate);
-            }
-            else if (authorSearchModel.BirthDate == null && authorSearchModel.DeathDate != null)
-            {
-                authors = authors.Where(a => a.DeathDate < authorSearchModel.DeathDate);
+                if (authorFilterModel.Name != null)
+                {
+                    authors = authors.Where(a => a.FullName.Contains(authorFilterModel.Name));
+                }
+                if (authorFilterModel.BirthDate != null && authorFilterModel.DeathDate != null)
+                {
+                    authors = authors.Where(a => a.BirthDate > authorFilterModel.BirthDate && a.DeathDate < authorFilterModel.DeathDate);
+                }
+                else if (authorFilterModel.BirthDate != null && authorFilterModel.DeathDate == null)
+                {
+                    authors = authors.Where(a => a.BirthDate > authorFilterModel.BirthDate);
+                }
+                else if (authorFilterModel.BirthDate == null && authorFilterModel.DeathDate != null)
+                {
+                    authors = authors.Where(a => a.DeathDate < authorFilterModel.DeathDate);
+                }
             }
             return Task.FromResult(authors);
         }

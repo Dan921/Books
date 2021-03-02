@@ -10,11 +10,10 @@ namespace Application.Interfaces
 {
     public interface IAuthorsQueriesService
     {
-        Task<IEnumerable<Author>> GetAuthors();
+        Task<IEnumerable<Author>> GetAuthors(AuthorFilterModel authorSearchModel);
         Task<Author> GetAuthorById(Guid id);
         Task<bool> InsertAuthor(Author author);
         Task<Author> UpdateAuthor(Author author);
         Task<bool> DeleteAuthor(Guid Id);
-        Task<IEnumerable<Author>> SearchBy(AuthorFilterModel authorSearchModel);
     }
 }

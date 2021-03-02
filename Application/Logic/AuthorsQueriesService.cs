@@ -20,9 +20,9 @@ namespace Application.Logic
             this.authorsRepository = authorsRepository;
         }
 
-        public async Task<IEnumerable<Author>> GetAuthors()
+        public async Task<IEnumerable<Author>> GetAuthors(AuthorFilterModel authorSearchModel)
         {
-            var authors = await authorsRepository.GetAll();
+            var authors = await authorsRepository.GetAuthorsUsingFilter(authorSearchModel);
             return authors;
         }
 
@@ -72,12 +72,6 @@ namespace Application.Logic
             {
                 return false;
             }
-        }
-
-        public async Task<IEnumerable<Author>> SearchBy(AuthorFilterModel authorSearchModel)
-        {
-            var authors = await authorsRepository.SearchBy(authorSearchModel);
-            return authors;
         }
     }
 }

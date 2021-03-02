@@ -21,5 +21,6 @@ namespace Application.Interfaces
         Task<bool> DeleteBookCover(Guid Id);
         Task<bool> IsBookCoverExist(Guid Id);
         Task<bool> AddReview(Guid bookId, BookReview review);
+        Task<IEnumerable<BookReview>> GetReviewsByBookId(Guid bookId);
     }
 }

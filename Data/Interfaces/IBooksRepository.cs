@@ -12,5 +12,6 @@ namespace Data.Interfaces
     {
         Task AddReview(Guid bookId, BookReview review);
         Task<IEnumerable<Book>> GetBooksUsingFilter(BookFilterModel bookFilterModel);
+        Task<IEnumerable<BookReview>> GetReviewsByBookId(Guid bookId);
     }
 }

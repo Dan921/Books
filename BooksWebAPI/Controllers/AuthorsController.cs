@@ -30,42 +30,40 @@ namespace BooksWebApi.Controllers
             this.mapper = mapper;
         }
 
-        // GET: api/Authors
-        [HttpPost("List")]
-        public async Task<ActionResult<AuthorsViewModel>> GetAuthorsOnPages([FromBody] AuthorFilterModel authorSearchModel, int page = 1)
+        [HttpPost("Page/{page}")]
+        public async Task<ActionResult<AuthorsViewModel>> GetAuthorsPage([FromBody] AuthorFilterModel authorSearchModel, [FromQuery] int page = 1)
         {
             int pageSize = 10;
-            IQueryable<AuthorModel> authors;
-            if (authorSearchModel != null)
+            var authors = await authorsService.GetAuthors(authorSearchModel);
+            if (authors == null)
             {
-                authors = mapper.Map<IQueryable<AuthorModel>>(await authorsService.SearchBy(authorSearchModel));
-                if (authors == null)
-                {
-                    return NotFound();
-                }
-            }
-            else
-            {
-                authors = mapper.Map<IQueryable<AuthorModel>>(await authorsService.GetAuthors());
+                return NotFound();
             }
 
-            var count = await authors.CountAsync();
-            var items = await authors.Skip((page - 1) * pageSize).Take(pageSize).ToListAsync();
+            var count = authors.Count();
+            var items = authors.Skip((page - 1) * pageSize).Take(pageSize).ToList();
 
             PageViewModel pageViewModel = new PageViewModel(count, page, pageSize);
             AuthorsViewModel viewModel = new AuthorsViewModel
             {
                 PageViewModel = pageViewModel,
-                authors = items
+                authors = mapper.Map<List<AuthorModel>>(items)
             };
             return Ok(viewModel);
         }
 
-        [HttpGet("List")]
+        [HttpGet]
         public async Task<IActionResult> GetAllAuthors()
         {
-            var authors = mapper.Map<List<AuthorModel>>(await authorsService.GetAuthors());
-            return Ok(authors);
+            var authors = mapper.Map<List<AuthorModel>>(await authorsService.GetAuthors(null));
+            if (authors == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                return Ok(authors);
+            }
         }
 
         // GET: api/Authors/5
