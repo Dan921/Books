@@ -7,5 +7,6 @@ namespace Data.Context
 {
     public class AppUser : IdentityUser<Guid>
     {
+        public string Login { get; set; }
     }
 }

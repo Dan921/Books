@@ -25,18 +25,18 @@ namespace Data.Repositories
             await context.SaveChangesAsync();
         }
 
-        public Task<IEnumerable<BookReview>> GetReviewsByBookId(Guid bookId)
+        public Task<IQueryable<BookReview>> GetReviewsByBookId(Guid bookId)
         {
-            IEnumerable<BookReview> reviews = context.BookReviews.Where(p => p.Book.Id == bookId);
+            IQueryable<BookReview> reviews = context.BookReviews.Where(p => p.Book.Id == bookId);
             return Task.FromResult(reviews);
         }
 
-        public Task<IEnumerable<Book>> GetBooksUsingFilter(BookFilterModel bookFilterModel)
+        public Task<IQueryable<Book>> GetBooksUsingFilter(BookFilterModel bookFilterModel)
         {
-            IEnumerable<Book> authors = context.Books;
+            IQueryable<Book> authors = context.Books;
             if (bookFilterModel != null)
             {
-                if (bookFilterModel.BookName != null)
+                if (!string.IsNullOrEmpty(bookFilterModel.BookName))
                 {
                     authors = authors.Where(a => a.Name.Contains(bookFilterModel.BookName));
                 }
@@ -44,7 +44,7 @@ namespace Data.Repositories
                 {
                     authors = authors.Where(a => a.Authors.Select(p => p.Id).Contains(bookFilterModel.AuthorId));
                 }
-                if (bookFilterModel.SeriesName != null)
+                if (!string.IsNullOrEmpty(bookFilterModel.SeriesName))
                 {
                     authors = authors.Where(a => a.BookSeries.Name.Contains(bookFilterModel.SeriesName));
                 }

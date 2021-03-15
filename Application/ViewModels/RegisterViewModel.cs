@@ -12,8 +12,8 @@ namespace Application.ViewModels
         public string Email { get; set; }
 
         [Required]
-        [Display(Name = "ФИО")]
-        public string FIO { get; set; }
+        [Display(Name = "Логин")]
+        public string Login { get; set; }
 
         [Required]
         [DataType(DataType.Password)]

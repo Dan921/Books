@@ -4,6 +4,7 @@ using Data.Models;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -11,10 +12,10 @@ namespace Application.Interfaces
 {
     public interface IBooksQueriesService
     {
-        Task<IEnumerable<Book>> GetBooks(BookFilterModel bookSearchModel, IList<string> roles);
+        Task<IQueryable<Book>> GetBooks(BookFilterModel bookSearchModel, IList<string> roles);
         Task<Book> GetBookById(Guid id);
         Task<bool> InsertBook(Book book);
-        Task<Book> UpdateBook(Book book);
+        Task<Book> UpdateBook(Book book, IList<string> roles);
         Task<bool> DeleteBook(Guid Id);
         Task<BookCover> UpdateBookCover(Guid id, IFormFile file);
         Task<byte[]> GetBookCover(Guid id);

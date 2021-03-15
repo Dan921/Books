@@ -22,11 +22,11 @@ namespace BooksWebApi.Controllers
     [Authorize]
     public class BooksController : ControllerBase
     {
-        UserManager<IdentityUser> userManager;
+        UserManager<AppUser> userManager;
         private IBooksQueriesService bookService;
         private IMapper mapper;
 
-        public BooksController(UserManager<IdentityUser> manager, IBooksQueriesService bookService, IMapper mapper)
+        public BooksController(UserManager<AppUser> manager, IBooksQueriesService bookService, IMapper mapper)
         {
             this.userManager = manager;
             this.bookService = bookService;
@@ -93,42 +93,21 @@ namespace BooksWebApi.Controllers
         [Authorize(Roles = "Администратор, Писатель, Проверяющий")]
         public async Task<IActionResult> PutBook(BookDetailModel bookDetailModel)
         {
-            var statusesIds = new Dictionary<string, Guid>()
+            try
             {
-                {"черновик", Guid("3c6d0e4b-b29f-40a3-ae24-cfc2d0bfec34")},
-                {"на рассмотрении", Guid("95e1c858-9659-45f5-8230-0d4b655ab827")},
-                {"опубликовано", Guid("8736898c-fe55-4f70-9b88-52c2e5f31be2")},
-                {"снято с публикации", Guid("faea15d1-b917-44cf-b18c-b021380af2b9")}
-            };
+                var book = mapper.Map<Book>(bookDetailModel);
 
-            if ((User.IsInRole("Писатель") && (bookDetailModel.BookStatusId == statusesIds["черновик"] || bookDetailModel.BookStatusId == statusesIds["на рассмотрении"])) ||
-                (User.IsInRole("Проверяющий") && (bookDetailModel.BookStatusId == statusesIds["на рассмотрении"] || bookDetailModel.BookStatusId == statusesIds["опубликовано"] || bookDetailModel.BookStatusId == statusesIds["снято с публикации"])))
-            {
-                try
+                var updatedBook = await bookService.UpdateBook(book, await userManager.GetRolesAsync(await userManager.GetUserAsync(User)));
+                if (updatedBook == null)
                 {
-                    var book = mapper.Map<Book>(bookDetailModel);
-
-                    var updatedBook = await bookService.UpdateBook(book);
-                    if (updatedBook == null)
-                    {
-                        return NotFound();
-                    }
-                    return Ok(book);
+                    return NotFound();
                 }
-                catch
-                {
-                    throw;
-                }
+                return Ok(book);
             }
-            else
+            catch
             {
-                return Forbid();
+                throw;
             }
-        }
-
-        private Guid Guid(string v)
-        {
-            throw new NotImplementedException();
         }
 
         // POST: api/Books

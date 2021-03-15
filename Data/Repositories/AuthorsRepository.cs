@@ -22,7 +22,7 @@ namespace Data.Repositories
             IEnumerable<Author> authors = context.Authors;
             if(authorFilterModel != null)
             {
-                if (authorFilterModel.Name != null)
+                if (!string.IsNullOrEmpty(authorFilterModel.Name))
                 {
                     authors = authors.Where(a => a.FullName.Contains(authorFilterModel.Name));
                 }

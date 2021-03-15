@@ -30,7 +30,7 @@ namespace Application.Logic
             return null;
         }
 
-        public async Task<IEnumerable<Book>> GetBooks(BookFilterModel bookSearchModel, IList<string> roles)
+        public async Task<IQueryable<Book>> GetBooks(BookFilterModel bookSearchModel, IList<string> roles)
         {
             var books = await bookRepository.GetBooksUsingFilter(bookSearchModel);
 
@@ -65,8 +65,29 @@ namespace Application.Logic
             }
         }
 
-        public async Task<Book> UpdateBook(Book book)
+        public async Task<Book> UpdateBook(Book book, IList<string> roles)
         {
+            var draftStatusName = "черновик";
+            var UnderConsiderationStatusName = "на рассмотрении";
+            var RemovedFromPublicationStatusName = "снято с публикации";
+            var PublishedStatusName = "снято с публикации";
+
+            if (roles.Contains("Писатель"))
+            {
+                if (!(book.BookStatus.Name == draftStatusName || book.BookStatus.Name == UnderConsiderationStatusName))
+                {
+                    return null;
+                }
+            }
+            if (roles.Contains("Проверяющий"))
+            {
+                if (!(book.BookStatus.Name == RemovedFromPublicationStatusName || book.BookStatus.Name == UnderConsiderationStatusName
+                    || book.BookStatus.Name == PublishedStatusName))
+                {
+                    return null;
+                }
+            }
+
             try
             {
                 await bookRepository.Update(book);

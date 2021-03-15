@@ -28,7 +28,8 @@ namespace BooksWebApi.Controllers
         {
             if (ModelState.IsValid)
             {
-                AppUser user = new AppUser { Email = model.Email, UserName = model.Email};
+                AppUser user = new AppUser { Email = model.Email, UserName = model.Email, Login = model.Login
+                };
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
