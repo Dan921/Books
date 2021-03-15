@@ -17,11 +17,13 @@ namespace Application.Logic
     {
         private readonly IBooksRepository bookRepository;
         private readonly IBookCoverRepository bookCoverRepository;
+        private readonly IBookRentsRepository bookRentsRepository;
 
-        public BooksQueriesService(IBooksRepository bookRepository, IBookCoverRepository bookCoverRepository)
+        public BooksQueriesService(IBooksRepository bookRepository, IBookCoverRepository bookCoverRepository, IBookRentsRepository bookRentsRepository)
         {
             this.bookRepository = bookRepository;
             this.bookCoverRepository = bookCoverRepository;
+            this.bookRentsRepository = bookRentsRepository;
         }
 
         public async Task<Book> GetBookById(Guid id)
@@ -198,6 +200,20 @@ namespace Application.Logic
         {
             var reviews = await bookRepository.GetReviewsByBookId(bookId);
             return reviews;
+        }
+
+        public async Task<bool> ToRentBook(BookRent bookRent)
+        {
+            try
+            {
+                await bookRentsRepository.Insert(bookRent);
+                await bookRentsRepository.Save();
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
         }
     }
 }

@@ -20,6 +20,6 @@ namespace Data.Context
         public DbSet<BookTag> BookTags { get; set; }
         public DbSet<BookReview> BookReviews { get; set; }
         public DbSet<BookCover> BookCovers { get; set; }
-
+        public DbSet<BookRent> BookRents { get; set; }
     }
 }

@@ -243,5 +243,18 @@ namespace BooksWebApi.Controllers
             var reviews = await bookService.GetReviewsByBookId(bookId);
             return Ok(reviews);
         }
+
+        [HttpPost("{id}/Rent")]
+        public async Task<ActionResult<BookReviewModel>> ToRentBook([FromQuery] Guid bookId, [FromBody] DateTime expirationDate)
+        {
+            var rent = new BookRent()
+            {
+                User = await userManager.GetUserAsync(User),
+                Book = await bookService.GetBookById(bookId),
+                ExpirationDate = expirationDate
+            };
+            var reviews = await bookService.ToRentBook(rent);
+            return Ok(reviews);
+        }
     }
 }
