@@ -1,4 +1,5 @@
-﻿using Application.ViewModels;
+﻿using Application.Interfaces;
+using Application.ViewModels;
 using Data.Context;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -15,11 +16,11 @@ namespace BooksWebApi.Controllers
     [ApiController]
     public class UsersController : ControllerBase
     {
-        UserManager<AppUser> userManager;
+        private IUserService userService;
 
-        public UsersController(UserManager<AppUser> userManager)
+        public UsersController(IUserService userService)
         {
-            this.userManager = userManager;
+            this.userService = userService;
         }
 
         [HttpPost("Create")]
@@ -27,9 +28,7 @@ namespace BooksWebApi.Controllers
         {
             if (ModelState.IsValid)
             {
-                AppUser user = new AppUser { Email = model.Email, UserName = model.Email};
-                var result = await userManager.CreateAsync(user, model.Password);
-                if (result.Succeeded)
+                if (await userService.CreateUser(model))
                 {
                     return Ok();
                 }
@@ -42,32 +41,25 @@ namespace BooksWebApi.Controllers
         {
             if (ModelState.IsValid)
             {
-                AppUser user = await userManager.FindByIdAsync(id);
-                if (user != null)
+                if (await userService.EditUser(model))
                 {
-                    user.Email = model.Email;
-                    user.UserName = model.Email;
-
-                    var result = await userManager.UpdateAsync(user);
-                    if (result.Succeeded)
-                    {
-                        return Ok();
-                    }
+                    return Ok();
                 }
             }
-            return Ok();
+            return BadRequest();
         }
 
         [HttpDelete("Delete/{id}")]
         public async Task<ActionResult> Delete(string id)
         {
-            AppUser user = await userManager.FindByIdAsync(id);
-            if (user != null)
+            if (ModelState.IsValid)
             {
-                await userManager.DeleteAsync(user);
-                return Ok();
+                if (await userService.DeleteUser(id))
+                {
+                    return Ok();
+                }
             }
-            return NotFound();
+            return BadRequest();
         }
 
         [HttpPost("ChangePassword")]
@@ -75,26 +67,12 @@ namespace BooksWebApi.Controllers
         {
             if (ModelState.IsValid)
             {
-                AppUser user = await userManager.FindByIdAsync(model.Id.ToString());
-                if (user != null)
+                if (await userService.ChangePassword(model))
                 {
-                    IdentityResult result =
-                        await userManager.ChangePasswordAsync(user, model.OldPassword, model.NewPassword);
-                    if (result.Succeeded)
-                    {
-                        return Ok();
-                    }
-                    else
-                    {
-                        return BadRequest();
-                    }
-                }
-                else
-                {
-                    return NotFound();
+                    return Ok();
                 }
             }
-            return Ok(model);
+            return BadRequest();
         }
     }
 }

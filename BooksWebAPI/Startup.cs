@@ -48,6 +48,7 @@ namespace BooksWebApi
             services.AddScoped<IBookSeriesQueriesService, BookSeriesQueriesService>();
             services.AddScoped<IBookGenresQueriesService, BookGenresQueriesService>();
             services.AddScoped<IBookTagsQueriesService, BookTagsQueriesService>();
+            services.AddScoped<IUserService, UserService>();
 
             services.AddAutoMapper(typeof(AutoMapperProfiles).Assembly);
 

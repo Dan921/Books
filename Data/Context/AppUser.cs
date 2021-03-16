@@ -8,5 +8,7 @@ namespace Data.Context
     public class AppUser : IdentityUser<Guid>
     {
         public string Login { get; set; }
+
+        public List<Book> FavoriteBooks { get; set; }
     }
 }
