@@ -93,8 +93,7 @@ namespace BooksWebApi.Controllers
             }
             else
             {
-                books = mapper.Map<List<BookShortModel>>(books);
-                return Ok(books);
+                return Ok(mapper.Map<List<BookShortModel>>(books));
             }
         }
 

@@ -3,6 +3,7 @@ using Data.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -19,10 +20,10 @@ namespace Data.Repositories
             dbSet = context.Set<TEntity>();
         }
 
-        public async Task<IEnumerable<TEntity>> GetAll()
+        public Task<IQueryable<TEntity>> GetAll()
         {
-            var data = await dbSet.ToListAsync();
-            return data;
+            IQueryable<TEntity> data = dbSet;
+            return Task.FromResult(data);
         }
 
         public async Task<TEntity> GetById(Guid id)

@@ -1,4 +1,5 @@
 ﻿using Application.Interfaces;
+using Application.Models.BookModels;
 using AutoMapper;
 using BooksWebApi.Attributes;
 using Data.Context;
@@ -21,38 +22,79 @@ namespace BooksWebApi.Controllers
     {
         UserManager<AppUser> userManager;
         private IBooksService bookService;
+        IPersonalAreaService personalAreaService;
         private IMapper mapper;
 
-        public PersonalAreaController(UserManager<AppUser> userManager, IBooksService bookService, IMapper mapper)
+        public PersonalAreaController(UserManager<AppUser> userManager, IPersonalAreaService personalAreaService,IBooksService bookService, IMapper mapper)
         {
             this.userManager = userManager;
             this.bookService = bookService;
+            this.personalAreaService = personalAreaService;
             this.mapper = mapper;
         }
 
-        [HttpGet]
+        [HttpGet("RentedBooks")]
         [AuthorizeRoles(UserRole.Reader)]
-        public async Task<ActionResult<BooksViewModel>> GetAllBooks()
+        public async Task<ActionResult<List<BookShortModel>>> GetRentedBooks()
         {
-            IQueryable<Book> books;
-
-            if (User.Identity.IsAuthenticated)
-            {
-                books = await bookService.GetBooks(null, await userManager.GetRolesAsync(await userManager.GetUserAsync(User)));
-            }
-            else
-            {
-                books = await bookService.GetBooks(null, null);
-            }
-
+            var user = await userManager.GetUserAsync(User);
+            var books = await personalAreaService.GetReadedBooks(user.Id);
             if (books == null)
             {
                 return NotFound();
             }
-            else
+
+            var shortBookModels = mapper.Map<List<BookShortModel>>(books);
+
+            return Ok(shortBookModels);
+        }
+
+        [HttpGet("ReadedBooks")]
+        [AuthorizeRoles(UserRole.Reader)]
+        public async Task<ActionResult<List<BookShortModel>>> GetReadedBooks()
+        {
+            var user = await userManager.GetUserAsync(User);
+            var books = await personalAreaService.GetReadedBooks(user.Id);
+            if (books == null)
             {
-                return Ok(books);
+                return NotFound();
             }
+
+            var shortBookModels = mapper.Map<List<BookShortModel>>(books);
+
+            return Ok(shortBookModels);
+        }
+
+        [HttpGet("Reviews")]
+        [AuthorizeRoles(UserRole.Reader)]
+        public async Task<ActionResult<List<BookReview>>> GetReviews()
+        {
+            var user = await userManager.GetUserAsync(User);
+            var reviews = await personalAreaService.GetReviews(user.UserName);
+            if (reviews == null)
+            {
+                return NotFound();
+            }
+
+            //var shortBookReviewModels = mapper.Map<List<BookReviewModel>>(reviews);
+
+            return Ok(reviews);
+        }
+
+        [HttpGet("FavoriteBooks")]
+        [AuthorizeRoles(UserRole.Reader)]
+        public async Task<ActionResult<List<BookShortModel>>> GetFavoriteBooks()
+        {
+            var user = await userManager.GetUserAsync(User);
+            var books = await personalAreaService.GetFavoriteBooks(user.Id);
+            if (books == null)
+            {
+                return NotFound();
+            }
+
+            var shortBookModels = mapper.Map<List<BookShortModel>>(books);
+
+            return Ok(shortBookModels);
         }
     }
 }
