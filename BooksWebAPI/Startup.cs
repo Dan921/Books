@@ -42,13 +42,14 @@ namespace BooksWebApi
             services.AddScoped<IGenresRepository, GenresRepository>();
             services.AddScoped<ITagsRepository, TagsRepository>();
             services.AddScoped<IBookRentsRepository, BookRentsRepository>();
+            services.AddScoped<IUserFavoriteBookRepository, UserFavoriteBookRepository>();
+            services.AddScoped<IBookChangesRepository, BookChangesRepository>();
 
-            services.AddScoped<IBooksQueriesService, BooksQueriesService>();
-            services.AddScoped<IAuthorsQueriesService, AuthorsQueriesService>();
-            services.AddScoped<IBookSeriesQueriesService, BookSeriesQueriesService>();
-            services.AddScoped<IBookGenresQueriesService, BookGenresQueriesService>();
-            services.AddScoped<IBookTagsQueriesService, BookTagsQueriesService>();
-            services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IBooksService, BooksService>();
+            services.AddScoped<IAuthorsService, AuthorsService>();
+            services.AddScoped<IBookSeriesService, BookSeriesService>();
+            services.AddScoped<IBookGenresService, BookGenresService>();
+            services.AddScoped<IBookTagsService, BookTagsService>();
 
             services.AddAutoMapper(typeof(AutoMapperProfiles).Assembly);
 

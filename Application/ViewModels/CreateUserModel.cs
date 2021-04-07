@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Application.ViewModels
 {
-    public class CreateUserViewModel
+    public class CreateUserModel
     {
         public string Email { get; set; }
         public string Password { get; set; }

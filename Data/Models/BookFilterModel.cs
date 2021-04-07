@@ -13,7 +13,7 @@ namespace Data.Models
         public Guid[] GanreIds { get; set; }
         public Guid[] TagIds { get; set; }
         public float? Rating { get; set; }
-        public Guid[] StatusIds { get; set; }
+        public List<BookStatus> Statuses { get; set; }
         public bool TopRated { get; set; }
         public bool TopByPopularity { get; set; }
     }

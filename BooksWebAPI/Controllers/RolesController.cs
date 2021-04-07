@@ -1,4 +1,6 @@
-﻿using Data.Context;
+﻿using BooksWebApi.Attributes;
+using Data.Context;
+using Data.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -12,16 +14,14 @@ namespace BooksWebApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Roles = "Администратор")]
+    [AuthorizeRoles(UserRole.Admin)]
     public class RolesController : ControllerBase
     {
         RoleManager<AppRole> roleManager;
-        UserManager<AppUser> userManager;
 
-        public RolesController(RoleManager<AppRole> roleManager, UserManager<AppUser> userManager)
+        public RolesController(RoleManager<AppRole> roleManager)
         {
             this.roleManager = roleManager;
-            this.userManager = userManager;
         }
 
         [HttpPost("Create")]
@@ -51,26 +51,6 @@ namespace BooksWebApi.Controllers
                 await roleManager.DeleteAsync(role);
                 return Ok();
             }
-            return NotFound();
-        }
-
-        [HttpPost("Edit/{id}")]
-        public async Task<IActionResult> Edit(string userId, List<string> roles)
-        {
-            AppUser user = await userManager.FindByIdAsync(userId);
-            if (user != null)
-            {
-                var userRoles = await userManager.GetRolesAsync(user);
-
-                var addedRoles = roles.Except(userRoles);
-                var removedRoles = userRoles.Except(roles);
-
-                await userManager.AddToRolesAsync(user, addedRoles);
-                await userManager.RemoveFromRolesAsync(user, removedRoles);
-
-                return Ok();
-            }
-
             return NotFound();
         }
     }

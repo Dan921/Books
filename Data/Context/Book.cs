@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Data.Models;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -8,9 +9,9 @@ namespace Data.Context
 {
     public class Book
     {
+        [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid Id { get; set; }
 
-        [Required]
         public string Name { get; set; }
 
         public string ShortDescription { get; set; }
@@ -23,6 +24,12 @@ namespace Data.Context
 
         public int NumberOfRatings { get; set; }
 
+        public BookSeries BookSeries { get; set; }
+
+        public Guid PublishedBy { get; set; }
+
+        public BookStatus BookStatus { get; set; }
+
         public ICollection<BookGenre> Genres { get; set; }
 
         public ICollection<BookTag> Tags { get; set; }
@@ -30,9 +37,5 @@ namespace Data.Context
         public ICollection<BookReview> Reviews { get; set; }
 
         public ICollection<Author> Authors { get; set; }
-
-        public BookStatus BookStatus { get; set; }
-
-        public BookSeries BookSeries { get; set; }
     }
 }

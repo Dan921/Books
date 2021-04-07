@@ -1,4 +1,5 @@
 ﻿using Application.Models;
+using Application.Models.BookModels;
 using AutoMapper;
 using Data.Context;
 using System;
@@ -11,13 +12,14 @@ namespace Application.Logic
     {
         public AutoMapperProfiles()
         {
-            CreateMap<Book, BookDetailModel>().ReverseMap();
+            CreateMap<Book, BookModel>().ReverseMap();
             CreateMap<Book, BookShortModel>().ReverseMap();
             CreateMap<Author, AuthorModel>().ReverseMap();
             CreateMap<BookGenre, BookGenreModel>().ReverseMap();
             CreateMap<BookReview, BookReviewModel>().ReverseMap();
             CreateMap<BookSeries, BookSeriesModel>().ReverseMap();
             CreateMap<BookTag, BookTagModel>().ReverseMap();
+            CreateMap<BookRent, BookRentModel>().ReverseMap();
         }
     }
 }

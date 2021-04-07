@@ -10,11 +10,11 @@ using System.Threading.Tasks;
 
 namespace Application.Logic
 {
-    public class BookSeriesQueriesService : IBookSeriesQueriesService
+    public class BookSeriesService : IBookSeriesService
     {
         private readonly ISeriesRepository seriesRepository;
 
-        public BookSeriesQueriesService(ISeriesRepository seriesRepository)
+        public BookSeriesService(ISeriesRepository seriesRepository)
         {
             this.seriesRepository = seriesRepository;
         }

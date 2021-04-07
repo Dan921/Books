@@ -8,11 +8,11 @@ using Data.Interfaces;
 
 namespace Application.Logic
 {
-    public class BookTagsQueriesService : IBookTagsQueriesService
+    public class BookTagsService : IBookTagsService
     {
         private readonly ITagsRepository tagsRepository;
 
-        public BookTagsQueriesService(ITagsRepository tagsRepository)
+        public BookTagsService(ITagsRepository tagsRepository)
         {
             this.tagsRepository = tagsRepository;
         }

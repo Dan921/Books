@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Application.Interfaces
 {
-    public interface IAuthorsQueriesService
+    public interface IAuthorsService
     {
         Task<IEnumerable<Author>> GetAuthors(AuthorFilterModel authorSearchModel);
         Task<Author> GetAuthorById(Guid id);

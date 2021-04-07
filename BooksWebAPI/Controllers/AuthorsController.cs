@@ -13,25 +13,26 @@ using Application.Interfaces;
 using Application.Logic;
 using Application.ViewModels;
 using Microsoft.AspNetCore.Authorization;
+using BooksWebApi.Attributes;
 
 namespace BooksWebApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Roles = "Администратор")]
+    [AuthorizeRoles(UserRole.Admin)]
     public class AuthorsController : ControllerBase
     {
-        private IAuthorsQueriesService authorsService;
+        private IAuthorsService authorsService;
         private IMapper mapper;
 
-        public AuthorsController(IAuthorsQueriesService authorsService, IMapper mapper)
+        public AuthorsController(IAuthorsService authorsService, IMapper mapper)
         {
             this.authorsService = authorsService;
             this.mapper = mapper;
         }
 
         [HttpPost("Page/{page}")]
-        public async Task<ActionResult<AuthorsViewModel>> GetAuthorsPage([FromBody] AuthorFilterModel authorSearchModel, [FromQuery] int page = 1)
+        public async Task<ActionResult<AuthorsModel>> GetAuthorsPage([FromBody] AuthorFilterModel authorSearchModel, [FromQuery] int page = 1)
         {
             int pageSize = 10;
             var authors = await authorsService.GetAuthors(authorSearchModel);
@@ -43,8 +44,8 @@ namespace BooksWebApi.Controllers
             var count = authors.Count();
             var items = authors.Skip((page - 1) * pageSize).Take(pageSize).ToList();
 
-            PageViewModel pageViewModel = new PageViewModel(count, page, pageSize);
-            AuthorsViewModel viewModel = new AuthorsViewModel
+            PageModel pageViewModel = new PageModel(count, page, pageSize);
+            AuthorsModel viewModel = new AuthorsModel
             {
                 PageViewModel = pageViewModel,
                 authors = mapper.Map<List<AuthorModel>>(items)

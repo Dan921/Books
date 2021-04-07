@@ -9,11 +9,11 @@ using System.Threading.Tasks;
 
 namespace Application.Logic
 {
-    public class BookGenresQueriesService : IBookGenresQueriesService
+    public class BookGenresService : IBookGenresService
     {
         private readonly IGenresRepository genresRepository;
 
-        public BookGenresQueriesService(IGenresRepository genresRepository)
+        public BookGenresService(IGenresRepository genresRepository)
         {
             this.genresRepository = genresRepository;
         }

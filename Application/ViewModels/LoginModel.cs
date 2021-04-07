@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Application.ViewModels
 {
-    public class LoginViewModel
+    public class LoginModel
     {
         [Required]
         [Display(Name = "Email")]

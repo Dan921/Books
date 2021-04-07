@@ -24,11 +24,11 @@ namespace BooksWebApi.Controllers
         }
 
         [HttpPost("Register")]
-        public async Task<IActionResult> Register(RegisterViewModel model)
+        public async Task<IActionResult> Register(RegisterModel model)
         {
             if (ModelState.IsValid)
             {
-                AppUser user = new AppUser { Email = model.Email, UserName = model.Email, Login = model.Login
+                AppUser user = new AppUser { Email = model.Email, UserName = model.Email
                 };
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
@@ -41,12 +41,11 @@ namespace BooksWebApi.Controllers
 
         [HttpPost("Login")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Login(LoginViewModel model)
+        public async Task<IActionResult> Login(LoginModel model)
         {
             if (ModelState.IsValid)
             {
-                var result =
-                    await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, false);
+                var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, false);
                 if (result.Succeeded)
                 {
                     if (!string.IsNullOrEmpty(model.ReturnUrl) && Url.IsLocalUrl(model.ReturnUrl))
@@ -55,15 +54,11 @@ namespace BooksWebApi.Controllers
                     }
                     else
                     {
-                        Ok();
+                        return Ok();
                     }
                 }
-                else
-                {
-                    BadRequest();
-                }
             }
-            return Ok();
+            return BadRequest();
         }
 
         [HttpPost("Logout")]

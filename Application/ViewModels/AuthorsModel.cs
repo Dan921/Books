@@ -5,9 +5,9 @@ using System.Text;
 
 namespace Application.ViewModels
 {
-    public class AuthorsViewModel
+    public class AuthorsModel
     {
         public IEnumerable<AuthorModel> authors { get; set; }
-        public PageViewModel PageViewModel { get; set; }
+        public PageModel PageViewModel { get; set; }
     }
 }

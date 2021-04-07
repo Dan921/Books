@@ -1,12 +1,10 @@
-﻿using Data.Context;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using System.Text;
 
-namespace Application.Models
+namespace Application.Models.BookModels
 {
-    public class BookDetailModel
+    public class BookUpdateModel
     {
         public Guid Id { get; set; }
 
@@ -16,15 +14,9 @@ namespace Application.Models
 
         public DateTime PublishingDate { get; set; }
 
-        public float Rating { get; set; }
-
-        public int NumberOfRatings { get; set; }
-
         public List<Guid> GenresIds { get; set; }
 
         public List<Guid> TagsIds { get; set; }
-
-        public Guid BookStatusId { get; set; }
 
         public Guid BookSeriesId { get; set; }
 

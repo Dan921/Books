@@ -7,13 +7,15 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Data.Context;
 using Application.Logic;
-using Application.Models;
 using AutoMapper;
 using Data.Models;
 using Application.Interfaces;
 using Application.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using BooksWebApi.Attributes;
+using Application.Models;
+using Application.Models.BookModels;
 
 namespace BooksWebApi.Controllers
 {
@@ -22,13 +24,13 @@ namespace BooksWebApi.Controllers
     [Authorize]
     public class BooksController : ControllerBase
     {
-        IUserService userService;
-        private IBooksQueriesService bookService;
+        UserManager<AppUser> userManager;
+        private IBooksService bookService;
         private IMapper mapper;
 
-        public BooksController(IUserService userService, IBooksQueriesService bookService, IMapper mapper)
+        public BooksController(UserManager<AppUser> userManager, IBooksService bookService, IMapper mapper)
         {
-            this.userService = userService;
+            this.userManager = userManager;
             this.bookService = bookService;
             this.mapper = mapper;
         }
@@ -36,10 +38,20 @@ namespace BooksWebApi.Controllers
         // POST: api/Books/List/1
         [HttpPost("Page/{page}")]
         [AllowAnonymous]
-        public async Task<ActionResult<BooksViewModel>> GetBooksPage([FromBody] BookFilterModel bookSearchModel, [FromQuery] int page = 1)
+        public async Task<ActionResult<BooksViewModel>> GetBooksPage([FromBody] BookFilterModel bookSearchModel, [FromRoute] int page = 1)
         {
             int pageSize = 10;
-            var books = await bookService.GetBooks(bookSearchModel, await userService.GetUserRoles(await userService.FindUser(User)));
+            IQueryable<Book> books;
+
+            if (User.Identity.IsAuthenticated)
+            {
+                books = await bookService.GetBooks(bookSearchModel, await userManager.GetRolesAsync(await userManager.GetUserAsync(User)));
+            }
+            else
+            {
+                books = await bookService.GetBooks(bookSearchModel, null);
+            }
+
             if (books == null)
             {
                 return null;
@@ -48,7 +60,7 @@ namespace BooksWebApi.Controllers
             var count = books.Count();
             var items = books.Skip((page - 1) * pageSize).Take(pageSize);
 
-            PageViewModel pageViewModel = new PageViewModel(count, page, pageSize);
+            PageModel pageViewModel = new PageModel(count, page, pageSize);
 
             BooksViewModel viewModel = new BooksViewModel
             {
@@ -62,24 +74,45 @@ namespace BooksWebApi.Controllers
         // GET: api/Books
         [HttpGet]
         [AllowAnonymous]
-        public async Task<ActionResult<BooksViewModel>> GetAllBooks()
+        public async Task<ActionResult<List<BookShortModel>>> GetAllBooks()
         {
-            var books = await bookService.GetBooks(null, await userService.GetUserRoles(await userService.FindUser(User)));
+            IQueryable<Book> books;
+
+            if (User.Identity.IsAuthenticated)
+            {
+                books = await bookService.GetBooks(null, await userManager.GetRolesAsync(await userManager.GetUserAsync(User)));
+            }
+            else
+            {
+                books = await bookService.GetBooks(null, null);
+            }
+
             if (books == null)
             {
                 return NotFound();
             }
             else
             {
+                books = mapper.Map<List<BookShortModel>>(books);
                 return Ok(books);
             }
         }
 
         // GET: api/Books/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<BookDetailModel>> GetBook(Guid id)
+        [AllowAnonymous]
+        public async Task<ActionResult<BookModel>> GetBook(Guid id)
         {
-            var book = await bookService.GetBookById(id);
+            Book book;
+
+            if (User.Identity.IsAuthenticated)
+            {
+                book = await bookService.GetBookById(id, await userManager.GetRolesAsync(await userManager.GetUserAsync(User)));
+            }
+            else
+            {
+                book = await bookService.GetBookById(id, null);
+            }
             if (book == null)
             {
                 return NotFound();
@@ -89,20 +122,39 @@ namespace BooksWebApi.Controllers
 
         // PUT: api/Books
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut]
-        [Authorize(Roles = "Администратор, Писатель, Проверяющий")]
-        public async Task<IActionResult> PutBook(BookDetailModel bookDetailModel)
+        [HttpPut("status")]
+        [AuthorizeRoles(UserRole.Admin, UserRole.Writer, UserRole.Checking)]
+        public async Task<IActionResult> ChangeBookStatus(Guid BookId, BookStatus bookStatus)
         {
             try
             {
-                var book = mapper.Map<Book>(bookDetailModel);
-
-                var updatedBook = await bookService.UpdateBook(book, await userService.GetUserRoles(await userService.FindUser(User)));
-                if (updatedBook == null)
+                if(await bookService.ChangeBookStatus(BookId, await userManager.GetRolesAsync(await userManager.GetUserAsync(User)), bookStatus))
                 {
-                    return NotFound();
+                    return Ok();
                 }
-                return Ok(book);
+                return Forbid();
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+        // PUT: api/Books
+        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [HttpPut]
+        [AuthorizeRoles(UserRole.Admin, UserRole.Writer)]
+        public async Task<IActionResult> UpdateBook(BookUpdateModel bookUpdateModel)
+        {
+            try
+            {
+                var book = mapper.Map<Book>(bookUpdateModel);
+
+                if (await bookService.UpdateBook(book))
+                {
+                    return Ok();
+                }
+                return NotFound();
             }
             catch
             {
@@ -113,8 +165,8 @@ namespace BooksWebApi.Controllers
         // POST: api/Books
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        [Authorize(Roles = "Администратор")]
-        public async Task<IActionResult> PostBook(BookDetailModel bookDetailModel)
+        [AuthorizeRoles(UserRole.Admin)]
+        public async Task<IActionResult> PostBook(BookModel bookDetailModel)
         {
             if (bookDetailModel == null)
             {
@@ -136,27 +188,21 @@ namespace BooksWebApi.Controllers
 
         // DELETE: api/Books/5
         [HttpDelete("{id}")]
-        [Authorize(Roles = "Администратор")]
+        [AuthorizeRoles(UserRole.Admin)]
         public async Task<IActionResult> DeleteBook(Guid id)
         {
-            var book = await bookService.GetBookById(id);
-            if (book == null)
+            if (await bookService.DeleteBook(id))
             {
-                return NotFound();
-            }
-            var isBookDeleted = await bookService.DeleteBook(id);
-            if (isBookDeleted == false)
-            {
-                return BadRequest();
+                return Ok();
             }
             else
             {
-                return Ok();
+                return BadRequest();
             }
         }
 
         [HttpPut("{id}/upload_cover")]
-        [Authorize(Roles = "Администратор, Писатель, Проверяющий")]
+        [AuthorizeRoles(UserRole.Admin, UserRole.Writer)]
         public async Task<IActionResult> UpdateBookCover(Guid id, IFormFile file)
         {
             try
@@ -193,7 +239,7 @@ namespace BooksWebApi.Controllers
         }
 
         [HttpDelete("{id}/cover")]
-        [Authorize(Roles = "Администратор")]
+        [AuthorizeRoles(UserRole.Admin, UserRole.Writer)]
         public async Task<IActionResult> DeleteBookCover(Guid Id)
         {
             if (bookService.IsBookCoverExist(Id).Result)
@@ -208,9 +254,9 @@ namespace BooksWebApi.Controllers
             return NotFound();
         }
 
-        [HttpPost("AddReview")]
+        [HttpPost("{bookId}/AddReview")]
         [AllowAnonymous]
-        public async Task<IActionResult> AddReview(Guid bookId, BookReviewModel bookReviewModel)
+        public async Task<IActionResult> AddReview([FromRoute] Guid bookId, [FromBody] BookReviewModel bookReviewModel)
         {
             if (bookReviewModel == null)
             {
@@ -219,21 +265,20 @@ namespace BooksWebApi.Controllers
 
             if (User.Identity.IsAuthenticated)
             {
-                bookReviewModel.UserName = (await userService.FindUser(User)).UserName;
+                bookReviewModel.UserName = (await userManager.GetUserAsync(User)).UserName;
             }
 
             bookReviewModel.Time = DateTime.Now;
 
             var bookReview = mapper.Map<BookReview>(bookReviewModel);
 
-            var isReviewCreated = await bookService.AddReview(bookId, bookReview);
-            if (isReviewCreated == false)
+            if (await bookService.AddReview(bookId, bookReview))
             {
-                return BadRequest();
+                return Ok();
             }
             else
             {
-                return Ok();
+                return BadRequest();
             }
         }
 
@@ -244,25 +289,26 @@ namespace BooksWebApi.Controllers
             return Ok(reviews);
         }
 
-        [HttpPost("{id}/Rent")]
-        public async Task<ActionResult<BookReviewModel>> ToRentBook([FromQuery] Guid bookId, [FromBody] DateTime expirationDate)
+        [HttpPost("{bookId}/Rent")]
+        public async Task<ActionResult> ToRentBook([FromRoute] Guid bookId, [FromBody] DateTime expirationDate)
         {
-            var rent = new BookRent()
+            var rentModel = new BookRentModel()
             {
-                User = await userService.FindUser(User),
-                Book = await bookService.GetBookById(bookId),
+                UserId = (await userManager.GetUserAsync(User)).Id,
+                BookId = bookId,
                 ExpirationDate = expirationDate
             };
+
+            var rent = mapper.Map<BookRent>(rentModel);
             var reviews = await bookService.ToRentBook(rent);
             return Ok(reviews);
         }
 
-        [Authorize(Roles = "Писатель, Администратор")]
-        [HttpPost("{id}/addеtofavorites")]
+        [HttpPost("{id}/addtofavorites")]
         public async Task<ActionResult<BookReviewModel>> AddBookToFavorites([FromQuery] Guid bookId)
         {
-            var user = await userService.FindUser(User);
-            var res = await userService.AddBookToFavorites(bookId, user);
+            var user = await userManager.GetUserAsync(User);
+            var res = await bookService.AddToFavorites(user.Id, bookId);
             if (res)
             {
                 return Ok();

@@ -64,9 +64,9 @@ namespace Data.Repositories
                 {
                     authors = authors.Where(a => a.Rating > bookFilterModel.Rating);
                 }
-                if (bookFilterModel.StatusIds != null)
+                if (bookFilterModel.Statuses != null)
                 {
-                    authors = authors.Where(a => bookFilterModel.StatusIds.Contains(a.BookStatus.Id));
+                    authors = authors.Where(a => bookFilterModel.Statuses.Contains(a.BookStatus));
                 }
                 if (bookFilterModel.TopRated == true)
                 {

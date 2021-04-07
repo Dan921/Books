@@ -5,15 +5,11 @@ using System.Text;
 
 namespace Application.ViewModels
 {
-    public class RegisterViewModel
+    public class RegisterModel
     {
         [Required]
         [Display(Name = "Email")]
         public string Email { get; set; }
-
-        [Required]
-        [Display(Name = "Логин")]
-        public string Login { get; set; }
 
         [Required]
         [DataType(DataType.Password)]

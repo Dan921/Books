@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Application.Interfaces
 {
-    public interface IBookSeriesQueriesService
+    public interface IBookSeriesService
     {
         Task<IEnumerable<BookSeries>> GetSeries();
         Task<BookSeries> GetSeriesById(Guid id);

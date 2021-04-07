@@ -10,18 +10,20 @@ using Application.Models;
 using AutoMapper;
 using Application.Interfaces;
 using Microsoft.AspNetCore.Authorization;
+using Data.Models;
+using BooksWebApi.Attributes;
 
 namespace BooksWebApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Roles = "Администратор")]
+    [AuthorizeRoles(UserRole.Admin)]
     public class BookSeriesController : ControllerBase
     {
-        private IBookSeriesQueriesService seriesService;
+        private IBookSeriesService seriesService;
         private IMapper mapper;
 
-        public BookSeriesController(IBookSeriesQueriesService seriesService, IMapper mapper)
+        public BookSeriesController(IBookSeriesService seriesService, IMapper mapper)
         {
             this.seriesService = seriesService;
             this.mapper = mapper;

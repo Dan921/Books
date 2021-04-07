@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Application.Models
+namespace Application.Models.BookModels
 {
     public class BookShortModel
     {

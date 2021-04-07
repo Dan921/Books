@@ -1,6 +1,8 @@
 ﻿using Application.Interfaces;
 using Application.ViewModels;
+using BooksWebApi.Attributes;
 using Data.Context;
+using Data.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -14,39 +16,71 @@ namespace BooksWebApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [AuthorizeRoles(UserRole.Admin)]
     public class UsersController : ControllerBase
     {
-        private IUserService userService;
+        private UserManager<AppUser> userManager;
 
-        public UsersController(IUserService userService)
+        public UsersController(UserManager<AppUser> userManager)
         {
-            this.userService = userService;
+            this.userManager = userManager;
         }
 
         [HttpPost("Create")]
-        public async Task<IActionResult> Create([FromBody] CreateUserViewModel model)
+        public async Task<IActionResult> Create([FromBody] CreateUserModel model)
         {
             if (ModelState.IsValid)
             {
-                if (await userService.CreateUser(model))
+                AppUser user = new AppUser { Email = model.Email, UserName = model.Email };
+                var result = await userManager.CreateAsync(user, model.Password);
+                if (result.Succeeded)
                 {
+                    await userManager.AddToRoleAsync(user, nameof(UserRole.Reader));
                     return Ok();
                 }
             }
             return BadRequest();
         }
 
-        [HttpPut("Edit/{id}")]
-        public async Task<IActionResult> Edit(string id, [FromBody] EditUserViewModel model)
+        [HttpPut("Edit")]
+        public async Task<IActionResult> Edit([FromBody] EditUserModel model)
         {
             if (ModelState.IsValid)
             {
-                if (await userService.EditUser(model))
+                AppUser user = await userManager.FindByIdAsync(model.Id.ToString());
+                if (user != null)
                 {
-                    return Ok();
+                    user.Email = model.Email;
+                    user.UserName = model.Email;
+
+                    var result = await userManager.UpdateAsync(user);
+                    if (result.Succeeded)
+                    {
+                        return Ok();
+                    }
                 }
             }
             return BadRequest();
+        }
+
+        [HttpPut("Edit/{Id}/roles")]
+        public async Task<IActionResult> EditUserRoles([FromRoute] string Id, List<string> roles)
+        {
+            AppUser user = await userManager.FindByIdAsync(Id);
+            if (user != null)
+            {
+                var userRoles = await userManager.GetRolesAsync(user);
+
+                var addedRoles = roles.Except(userRoles);
+                var removedRoles = userRoles.Except(roles);
+
+                await userManager.AddToRolesAsync(user, addedRoles);
+                await userManager.RemoveFromRolesAsync(user, removedRoles);
+
+                return Ok();
+            }
+
+            return NotFound();
         }
 
         [HttpDelete("Delete/{id}")]
@@ -54,8 +88,10 @@ namespace BooksWebApi.Controllers
         {
             if (ModelState.IsValid)
             {
-                if (await userService.DeleteUser(id))
+                AppUser user = await userManager.FindByIdAsync(id);
+                if (user != null)
                 {
+                    await userManager.DeleteAsync(user);
                     return Ok();
                 }
             }
@@ -63,13 +99,18 @@ namespace BooksWebApi.Controllers
         }
 
         [HttpPost("ChangePassword")]
-        public async Task<IActionResult> ChangePassword(ChangePasswordViewModel model)
+        public async Task<IActionResult> ChangePassword(ChangePasswordModel model)
         {
             if (ModelState.IsValid)
             {
-                if (await userService.ChangePassword(model))
+                AppUser user = await userManager.FindByIdAsync(model.Id.ToString());
+                if (user != null)
                 {
-                    return Ok();
+                    IdentityResult result = await userManager.ChangePasswordAsync(user, model.OldPassword, model.NewPassword);
+                    if (result.Succeeded)
+                    {
+                        return Ok();
+                    }
                 }
             }
             return BadRequest();

@@ -10,12 +10,13 @@ using System.Threading.Tasks;
 
 namespace Application.Interfaces
 {
-    public interface IBooksQueriesService
+    public interface IBooksService
     {
         Task<IQueryable<Book>> GetBooks(BookFilterModel bookSearchModel, IList<string> roles);
-        Task<Book> GetBookById(Guid id);
+        Task<Book> GetBookById(Guid id, IList<string> roles);
         Task<bool> InsertBook(Book book);
-        Task<Book> UpdateBook(Book book, IList<string> roles);
+        Task<bool> UpdateBook(Book book);
+        Task<bool> ChangeBookStatus(Guid bookId, IList<string> roles, BookStatus bookStatus);
         Task<bool> DeleteBook(Guid Id);
         Task<BookCover> UpdateBookCover(Guid id, IFormFile file);
         Task<byte[]> GetBookCover(Guid id);
@@ -24,5 +25,6 @@ namespace Application.Interfaces
         Task<bool> AddReview(Guid bookId, BookReview review);
         Task<IEnumerable<BookReview>> GetReviewsByBookId(Guid bookId);
         Task<bool> ToRentBook(BookRent bookRent);
+        Task<bool> AddToFavorites(Guid userId, Guid bookId);
     }
 }

@@ -11,11 +11,11 @@ using System.Threading.Tasks;
 
 namespace Application.Logic
 {
-    public class AuthorsQueriesService : IAuthorsQueriesService
+    public class AuthorsService : IAuthorsService
     {
         private readonly IAuthorsRepository authorsRepository;
 
-        public AuthorsQueriesService(IAuthorsRepository authorsRepository)
+        public AuthorsService(IAuthorsRepository authorsRepository)
         {
             this.authorsRepository = authorsRepository;
         }

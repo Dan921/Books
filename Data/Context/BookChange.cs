@@ -6,10 +6,15 @@ using System.Text;
 
 namespace Data.Context
 {
-    public class BookCover
+    public class BookChange
     {
+        [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid Id { get; set; }
 
-        public byte[] CoverImage { get; set; }
+        public Book Book { get; set; }
+
+        public Book ChangedBook { get; set; }
+
+        public Guid CheckingId { get; set; }
     }
 }

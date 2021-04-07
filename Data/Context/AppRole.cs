@@ -7,9 +7,10 @@ namespace Data.Context
 {
     public class AppRole : IdentityRole<Guid>
     {
+        public AppRole() : base() { }
+
         public AppRole(string name)
-        {
-            this.Name = name;
-        }
+            : base(name)
+        { }
     }
 }
