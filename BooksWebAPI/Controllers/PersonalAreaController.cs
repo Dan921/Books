@@ -101,7 +101,7 @@ namespace BooksWebApi.Controllers
 
         [HttpGet("PublishedBooks")]
         [AuthorizeRoles(UserRole.Writer, UserRole.Admin)]
-        public async Task<ActionResult<List<BookShortModel>>> GetPublishedBooks()
+        public async Task<ActionResult<List<PublishedBookModel>>> GetPublishedBooks()
         {
             List<PublishedBookModel> publishedBookModels = new List<PublishedBookModel>();
             var user = await userManager.GetUserAsync(User);
@@ -124,6 +124,38 @@ namespace BooksWebApi.Controllers
             }
 
             return Ok(publishedBookModels);
+        }
+
+        [HttpGet("BooksUnderConsideration")]
+        [AuthorizeRoles(UserRole.Checking, UserRole.Admin)]
+        public async Task<ActionResult<List<BookModel>>> GetBooksUnderConsideration()
+        {
+            var books = await bookService.GetBooksByStatus(BookStatus.UnderConsideration);
+
+            var bookModels = mapper.Map<List<BookModel>>(books);
+
+            return Ok(bookModels);
+        }
+
+        [HttpGet("VerifiedBooks")]
+        [AuthorizeRoles(UserRole.Checking, UserRole.Admin)]
+        public async Task<ActionResult<List<BookModel>>> GetVerifiedBooks()
+        {
+            List<VerifiedBookModel> verifiedBookModels = new List<VerifiedBookModel>();
+            var user = await userManager.GetUserAsync(User);
+            var books = await personalAreaService.GetVerifiedBooks(user.Id);
+
+            foreach (var book in books)
+            {
+                var verifiedBookModel = new VerifiedBookModel()
+                {
+                    Book = mapper.Map<BookModel>(book),
+                    Reviews = mapper.Map<List<BookReviewModel>>(await bookService.GetReviewsByBookId(book.Id))
+                };
+                verifiedBookModels.Add(verifiedBookModel);
+            }
+
+            return Ok(verifiedBookModels);
         }
     }
 }

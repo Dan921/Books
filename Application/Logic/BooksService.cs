@@ -25,8 +25,8 @@ namespace Application.Logic
         private readonly IBookChangesRepository bookChangesRepository;
         private readonly IBookStatusChangeRepository bookStatusChangeRepository;
 
-        public BooksService(IBooksRepository bookRepository, 
-            IBookCoverRepository bookCoverRepository, 
+        public BooksService(IBooksRepository bookRepository,
+            IBookCoverRepository bookCoverRepository,
             IBookRentsRepository bookRentsRepository,
             IUserFavoriteBookRepository userFavoriteBookRepository,
             IBookChangesRepository bookChangesRepository,
@@ -46,7 +46,7 @@ namespace Application.Logic
 
             var book = await bookRepository.GetById(id);
 
-            if(book != null)
+            if (book != null)
             {
                 if (roles == null || roles.Contains(nameof(UserRole.Checking)))
                 {
@@ -79,7 +79,7 @@ namespace Application.Logic
             var filteredBooks = await bookRepository.GetBooksUsingFilter(bookSearchModel);
             IQueryable<Book> books = null;
 
-            if(roles == null || roles.Contains(nameof(UserRole.Checking)))
+            if (roles == null || roles.Contains(nameof(UserRole.Checking)))
             {
                 books = books.Union(filteredBooks.Where(p => p.BookStatus == BookStatus.Published));
             }
@@ -226,7 +226,7 @@ namespace Application.Logic
                 if (book != null)
                 {
                     var bookCover = await bookCoverRepository.GetById(Id);
-                    if(bookCover == null)
+                    if (bookCover == null)
                     {
                         await bookCoverRepository.Insert(new BookCover() { Id = book.Id, CoverImage = ImageConverter.ConvertToByteArray(file) });
                         await bookCoverRepository.Save();
@@ -320,7 +320,7 @@ namespace Application.Logic
 
         public async Task<bool> AddToFavorites(Guid userId, Guid bookId)
         {
-            if(await bookRepository.GetById(bookId) != null)
+            if (await bookRepository.GetById(bookId) != null)
             {
                 try
                 {
@@ -341,6 +341,19 @@ namespace Application.Logic
             else
             {
                 return false;
+            }
+        }
+
+        public async Task<IQueryable<Book>> GetBooksByStatus(BookStatus bookStatus)
+        {
+            try
+            {
+                var books = (await bookRepository.GetAll()).Where(p => p.BookStatus == bookStatus);
+                return books;
+            }
+            catch
+            {
+                return null;
             }
         }
     }

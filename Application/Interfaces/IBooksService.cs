@@ -14,7 +14,7 @@ namespace Application.Interfaces
     {
         Task<IQueryable<Book>> GetBooks(BookFilterModel bookSearchModel, IList<string> roles);
         Task<Book> GetBookById(Guid id, IList<string> roles);
-        Task<bool> InsertBook(Book book, Guid userId)
+        Task<bool> InsertBook(Book book, Guid userId);
         Task<bool> UpdateBook(Book book);
         Task<bool> ChangeBookStatus(Guid bookId, IList<string> roles, BookStatus bookStatus);
         Task<bool> DeleteBook(Guid Id);
@@ -26,5 +26,6 @@ namespace Application.Interfaces
         Task<IEnumerable<BookReview>> GetReviewsByBookId(Guid bookId);
         Task<bool> ToRentBook(BookRent bookRent);
         Task<bool> AddToFavorites(Guid userId, Guid bookId);
+        Task<IQueryable<Book>> GetBooksByStatus(BookStatus bookStatus);
     }
 }

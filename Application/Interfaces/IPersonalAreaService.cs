@@ -16,5 +16,6 @@ namespace Application.Interfaces
         Task<IQueryable<Book>> GetPublishedBooksByUserId(Guid userId);
         Task<int> GetReadersCountByBookId(Guid bookId);
         Task<IQueryable<BookStatusChange>> GetStatusChangesByBookId(Guid bookId);
+        Task<IQueryable<Book>> GetVerifiedBooks(Guid userId);
     }
 }

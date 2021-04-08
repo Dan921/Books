@@ -128,5 +128,18 @@ namespace Application.Logic
             int readersCount = (await bookRentsRepository.GetAll()).Where(p => p.Book.Id == bookId).Count();
             return readersCount;
         }
+
+        public async Task<IQueryable<Book>> GetVerifiedBooks(Guid userId)
+        {
+            try
+            {
+                var books = (await bookChangesRepository.GetAll()).Where(p => p.CheckingId == userId).Select(p => p.Book);
+                return books;
+            }
+            catch
+            {
+                return null;
+            }
+        }
     }
 }
