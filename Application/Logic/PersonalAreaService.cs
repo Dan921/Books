@@ -17,6 +17,7 @@ namespace Application.Logic
         private readonly IUserFavoriteBookRepository userFavoriteBookRepository;
         private readonly IBookChangesRepository bookChangesRepository;
         private readonly IBookReviewsRepository bookReviewsRepository;
+        private readonly IBookStatusChangeRepository bookStatusChangeRepository;
         private readonly UserManager<AppUser> userManager;
 
         public PersonalAreaService(IBooksRepository bookRepository,
@@ -25,6 +26,7 @@ namespace Application.Logic
             IUserFavoriteBookRepository userFavoriteBookRepository,
             IBookChangesRepository bookChangesRepository,
             IBookReviewsRepository bookReviewsRepository,
+            IBookStatusChangeRepository bookStatusChangeRepository,
             UserManager<AppUser> userManager)
         {
             this.bookRepository = bookRepository;
@@ -33,6 +35,7 @@ namespace Application.Logic
             this.userFavoriteBookRepository = userFavoriteBookRepository;
             this.bookChangesRepository = bookChangesRepository;
             this.bookReviewsRepository = bookReviewsRepository;
+            this.bookStatusChangeRepository = bookStatusChangeRepository;
             this.userManager = userManager;
         }
 
@@ -92,6 +95,38 @@ namespace Application.Logic
             {
                 return null;
             }
+        }
+
+        public async Task<IQueryable<Book>> GetPublishedBooksByUserId(Guid userId)
+        {
+            try
+            {
+                var books = (await bookRepository.GetAll()).Where(p => p.PublishedBy == userId);
+                return books;
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        public async Task<IQueryable<BookStatusChange>> GetStatusChangesByBookId(Guid bookId)
+        {
+            try
+            {
+                var bookStatusChange = (await bookStatusChangeRepository.GetAll()).Where(p => p.Book.Id == bookId);
+                return bookStatusChange;
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        public async Task<int> GetReadersCountByBookId(Guid bookId)
+        {
+            int readersCount = (await bookRentsRepository.GetAll()).Where(p => p.Book.Id == bookId).Count();
+            return readersCount;
         }
     }
 }

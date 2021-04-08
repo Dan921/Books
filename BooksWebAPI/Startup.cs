@@ -44,6 +44,7 @@ namespace BooksWebApi
             services.AddScoped<IBookRentsRepository, BookRentsRepository>();
             services.AddScoped<IUserFavoriteBookRepository, UserFavoriteBookRepository>();
             services.AddScoped<IBookChangesRepository, BookChangesRepository>();
+            services.AddScoped<IBookStatusChangeRepository, BookStatusChangeRepository>();
 
             services.AddScoped<IBooksService, BooksService>();
             services.AddScoped<IAuthorsService, AuthorsService>();

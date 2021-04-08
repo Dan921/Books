@@ -11,6 +11,10 @@ namespace Application.Models.BookModels
 
         public string Name { get; set; }
 
+        public float Rating { get; set; }
+
+        public DateTime PublishingDate { get; set; }
+
         public string ShortDescription { get; set; }
     }
 }

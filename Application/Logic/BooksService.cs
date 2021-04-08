@@ -3,6 +3,7 @@ using Application.Models;
 using Data.Context;
 using Data.Interfaces;
 using Data.Models;
+using Data.Repositories;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
@@ -22,13 +23,16 @@ namespace Application.Logic
         private readonly IBookRentsRepository bookRentsRepository;
         private readonly IUserFavoriteBookRepository userFavoriteBookRepository;
         private readonly IBookChangesRepository bookChangesRepository;
+        private readonly IBookStatusChangeRepository bookStatusChangeRepository;
 
         public BooksService(IBooksRepository bookRepository, 
             IBookCoverRepository bookCoverRepository, 
             IBookRentsRepository bookRentsRepository,
             IUserFavoriteBookRepository userFavoriteBookRepository,
-            IBookChangesRepository bookChangesRepository)
+            IBookChangesRepository bookChangesRepository,
+            IBookStatusChangeRepository bookStatusChangeRepository)
         {
+            this.bookStatusChangeRepository = bookStatusChangeRepository;
             this.bookRepository = bookRepository;
             this.bookCoverRepository = bookCoverRepository;
             this.bookRentsRepository = bookRentsRepository;
@@ -90,10 +94,11 @@ namespace Application.Logic
             return books;
         }
 
-        public async Task<bool> InsertBook(Book book)
+        public async Task<bool> InsertBook(Book book, Guid userId)
         {
             try
             {
+                book.PublishedBy = userId;
                 await bookRepository.Insert(book);
                 await bookRepository.Save();
                 return true;
@@ -129,6 +134,17 @@ namespace Application.Logic
             if (haveRights)
             {
                 var book = await bookRepository.GetById(bookId);
+                var bookStatusChange = new BookStatusChange()
+                {
+                    Book = book,
+                    OldStatus = book.BookStatus,
+                    NewStatus = bookStatus,
+                    ChangeDate = DateTime.Now
+                };
+
+                await bookStatusChangeRepository.Insert(bookStatusChange);
+                await bookStatusChangeRepository.Save();
+
                 book.BookStatus = bookStatus;
                 await bookRepository.Update(book);
                 await bookRepository.Save();

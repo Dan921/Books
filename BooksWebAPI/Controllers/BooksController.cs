@@ -121,13 +121,13 @@ namespace BooksWebApi.Controllers
 
         // PUT: api/Books
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("status")]
+        [HttpPut("{bookId}/changeStatus")]
         [AuthorizeRoles(UserRole.Admin, UserRole.Writer, UserRole.Checking)]
-        public async Task<IActionResult> ChangeBookStatus(Guid BookId, BookStatus bookStatus)
+        public async Task<IActionResult> ChangeBookStatus([FromRoute] Guid bookId, [FromBody] BookStatus bookStatus)
         {
             try
             {
-                if(await bookService.ChangeBookStatus(BookId, await userManager.GetRolesAsync(await userManager.GetUserAsync(User)), bookStatus))
+                if(await bookService.ChangeBookStatus(bookId, await userManager.GetRolesAsync(await userManager.GetUserAsync(User)), bookStatus))
                 {
                     return Ok();
                 }
@@ -164,7 +164,7 @@ namespace BooksWebApi.Controllers
         // POST: api/Books
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        [AuthorizeRoles(UserRole.Admin)]
+        [AuthorizeRoles(UserRole.Admin, UserRole.Writer)]
         public async Task<IActionResult> PostBook(BookModel bookDetailModel)
         {
             if (bookDetailModel == null)
@@ -174,7 +174,7 @@ namespace BooksWebApi.Controllers
 
             var book = mapper.Map<Book>(bookDetailModel);
 
-            var isBookCreated = await bookService.InsertBook(book);
+            var isBookCreated = await bookService.InsertBook(book, (await userManager.GetUserAsync(User)).Id);
             if (isBookCreated == false)
             {
                 return BadRequest();

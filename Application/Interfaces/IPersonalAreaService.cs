@@ -13,5 +13,8 @@ namespace Application.Interfaces
         Task<IQueryable<Book>> GetReadedBooks(Guid userId);
         Task<IQueryable<BookReview>> GetReviews(string userName);
         Task<IQueryable<Book>> GetFavoriteBooks(Guid userId);
+        Task<IQueryable<Book>> GetPublishedBooksByUserId(Guid userId);
+        Task<int> GetReadersCountByBookId(Guid bookId);
+        Task<IQueryable<BookStatusChange>> GetStatusChangesByBookId(Guid bookId);
     }
 }

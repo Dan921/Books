@@ -1,5 +1,7 @@
 ﻿using Application.Interfaces;
+using Application.Models;
 using Application.Models.BookModels;
+using Application.ViewModels;
 using AutoMapper;
 using BooksWebApi.Attributes;
 using Data.Context;
@@ -34,7 +36,7 @@ namespace BooksWebApi.Controllers
         }
 
         [HttpGet("RentedBooks")]
-        [AuthorizeRoles(UserRole.Reader)]
+        [AuthorizeRoles(UserRole.Reader, UserRole.Admin)]
         public async Task<ActionResult<List<BookShortModel>>> GetRentedBooks()
         {
             var user = await userManager.GetUserAsync(User);
@@ -50,7 +52,7 @@ namespace BooksWebApi.Controllers
         }
 
         [HttpGet("ReadedBooks")]
-        [AuthorizeRoles(UserRole.Reader)]
+        [AuthorizeRoles(UserRole.Reader, UserRole.Admin)]
         public async Task<ActionResult<List<BookShortModel>>> GetReadedBooks()
         {
             var user = await userManager.GetUserAsync(User);
@@ -66,7 +68,7 @@ namespace BooksWebApi.Controllers
         }
 
         [HttpGet("Reviews")]
-        [AuthorizeRoles(UserRole.Reader)]
+        [AuthorizeRoles(UserRole.Reader, UserRole.Admin)]
         public async Task<ActionResult<List<BookReview>>> GetReviews()
         {
             var user = await userManager.GetUserAsync(User);
@@ -82,7 +84,7 @@ namespace BooksWebApi.Controllers
         }
 
         [HttpGet("FavoriteBooks")]
-        [AuthorizeRoles(UserRole.Reader)]
+        [AuthorizeRoles(UserRole.Reader, UserRole.Admin)]
         public async Task<ActionResult<List<BookShortModel>>> GetFavoriteBooks()
         {
             var user = await userManager.GetUserAsync(User);
@@ -95,6 +97,33 @@ namespace BooksWebApi.Controllers
             var shortBookModels = mapper.Map<List<BookShortModel>>(books);
 
             return Ok(shortBookModels);
+        }
+
+        [HttpGet("PublishedBooks")]
+        [AuthorizeRoles(UserRole.Writer, UserRole.Admin)]
+        public async Task<ActionResult<List<BookShortModel>>> GetPublishedBooks()
+        {
+            List<PublishedBookModel> publishedBookModels = new List<PublishedBookModel>();
+            var user = await userManager.GetUserAsync(User);
+            var books = await personalAreaService.GetPublishedBooksByUserId(user.Id);
+            if (books == null)
+            {
+                return NotFound();
+            }
+
+            foreach (var book in books)
+            {
+                var publishedBookModel = new PublishedBookModel()
+                {
+                    Book = mapper.Map<BookShortModel>(book),
+                    Reviews = mapper.Map<List<BookReviewModel>>(await bookService.GetReviewsByBookId(book.Id)),
+                    StatusChanges = mapper.Map<List<BookStatusChangeModel>>(await personalAreaService.GetStatusChangesByBookId(book.Id)),
+                    ReadersCount = await personalAreaService.GetReadersCountByBookId(book.Id)
+            };
+                publishedBookModels.Add(publishedBookModel);
+            }
+
+            return Ok(publishedBookModels);
         }
     }
 }

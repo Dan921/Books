@@ -14,7 +14,7 @@ namespace Application.Interfaces
     {
         Task<IQueryable<Book>> GetBooks(BookFilterModel bookSearchModel, IList<string> roles);
         Task<Book> GetBookById(Guid id, IList<string> roles);
-        Task<bool> InsertBook(Book book);
+        Task<bool> InsertBook(Book book, Guid userId)
         Task<bool> UpdateBook(Book book);
         Task<bool> ChangeBookStatus(Guid bookId, IList<string> roles, BookStatus bookStatus);
         Task<bool> DeleteBook(Guid Id);

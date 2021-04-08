@@ -20,6 +20,7 @@ namespace Application.Logic
             CreateMap<BookSeries, BookSeriesModel>().ReverseMap();
             CreateMap<BookTag, BookTagModel>().ReverseMap();
             CreateMap<BookRent, BookRentModel>().ReverseMap();
+            CreateMap<BookStatusChange, BookStatusChangeModel>().ReverseMap();
         }
     }
 }
