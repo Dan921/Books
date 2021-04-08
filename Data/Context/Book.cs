@@ -24,11 +24,11 @@ namespace Data.Context
 
         public int NumberOfRatings { get; set; }
 
-        public BookSeries BookSeries { get; set; }
-
         public Guid PublishedBy { get; set; }
 
         public BookStatus BookStatus { get; set; }
+
+        public BookSeries BookSeries { get; set; }
 
         public ICollection<BookGenre> Genres { get; set; }
 

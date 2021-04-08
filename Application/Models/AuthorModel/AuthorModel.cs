@@ -18,5 +18,7 @@ namespace Application.Models
         public string BirthPlace { get; set; }
 
         public string Biography { get; set; }
+
+        public IEnumerable<Guid> BooksIds { get; set; }
     }
 }

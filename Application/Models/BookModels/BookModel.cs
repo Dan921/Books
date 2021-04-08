@@ -23,13 +23,13 @@ namespace Application.Models.BookModels
 
         public Guid BookSeriesId { get; set; }
 
-        public List<Guid> GenresIds { get; set; }
+        public IEnumerable<Guid> GenresIds { get; set; }
 
-        public List<Guid> TagsIds { get; set; }
+        public IEnumerable<Guid> TagsIds { get; set; }
 
-        public List<Guid> ReviewsIds { get; set; }
+        public IEnumerable<Guid> ReviewsIds { get; set; }
 
-        public List<Guid> AuthorsIds { get; set; }
+        public IEnumerable<Guid> AuthorsIds { get; set; }
 
         public BookStatus BookStatus { get; set; }
     }

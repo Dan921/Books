@@ -5,10 +5,12 @@ using System.Text;
 
 namespace Application.Models
 {
-    public class BookTagModel
+    public class BookSeriesModel
     {
         public Guid Id { get; set; }
 
         public string Name { get; set; }
+
+        public IEnumerable<Book> BooksIds { get; set; }
     }
 }
